@@ -9,10 +9,12 @@ namespace Marin.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthManager _authManager;
+        private readonly IUserManager _userManager;
 
-        public AuthController(IAuthManager authManager)
+        public AuthController(IAuthManager authManager, IUserManager userManager)
         {
             _authManager = authManager;
+            _userManager = userManager;
         }
 
         public IActionResult Login()
@@ -50,6 +52,31 @@ namespace Marin.Controllers
                 await _authManager.SignOut();
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel vm, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var signinResult = await _userManager.CreateUser(vm.FirstName, vm.LastName, vm.Email, vm.Password);
+
+                if (signinResult.Succeeded)
+                {
+                    if (String.IsNullOrWhiteSpace(returnUrl))
+                    {
+                        return RedirectToAction("Index", "Home");
+
+                    }
+                    return Redirect(returnUrl);
+                }
+                ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
+            }
+            return View();
         }
     }
 }

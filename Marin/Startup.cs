@@ -139,6 +139,7 @@ namespace Marin
                 container.Register<IDbContext, BudgetDbContext>(hybridLifestyle);
 
                 container.Register<IAuthManager,AuthManager>();
+                container.Register<IUserManager,UserManager>();
 
                //Repository
                 container.Register(typeof(IRepository<>),typeof(Repository<>),hybridLifestyle);

@@ -16,39 +16,44 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link href="~/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+        <link href="~/css/sidemenu.css" rel="stylesheet" />
     </environment>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <ul class="nav navbar-nav navbar-right right right20">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <ul class="nav navbar-nav navbar-right right right20">
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="padding15">@User.Identity.Name<i class="fa fa-user-o fa-2x" aria-hidden="true"></i></li>
                     <li><a asp-controller="Auth" asp-action="Logout">Logga ut</a></li>
-
+                }
+                else
+                {
+                    <li><a asp-controller="Auth" asp-action="Register">Skapa ny användare</a></li>
                 }
             </ul>
         </div>
-</nav>
-<div id="mySidenav" class="sidenav col-xs-2 col-sm-2 col-md-2 col-lg-2">
-    <ul>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <li><a asp-area="" asp-controller="Home" asp-action="Index">Startsida</a></li>
-            <li><a asp-area="" asp-controller="Home" asp-action="About">Mina budgetar</a></li>
-            <li><a asp-area="" asp-controller="Home" asp-action="Contact">Skapa ny budget</a></li>
-        }
-    </ul>
-</div>
+    </nav>
+    <div id="mySidenav" class="sidenav col-xs-2 col-sm-2 col-md-2 col-lg-2">
+        <ul>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Startsida</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="About">Mina budgetar</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Contact">Skapa ny budget</a></li>
+            }
+        </ul>
+    </div>
     <div class="container body-content">
         @RenderBody()
         <hr />
