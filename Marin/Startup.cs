@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Domain.Common;
 using Infrastructure.DAL;
@@ -10,9 +11,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,6 +41,7 @@ namespace Marin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddMvc();
             services.AddScoped<IAuthManager, AuthManager>();
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<BudgetDbContext>()
@@ -89,7 +94,7 @@ namespace Marin
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeder seeder, SignInManager<MarinAppUser> signInManager, UserManager<MarinAppUser> userManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeder seeder)
         {
            Bootstrap.InitializeContainer(app,Container);
 
@@ -107,6 +112,7 @@ namespace Marin
 
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseRequestLocalization();
 
             app.UseMvc(routes =>
             {
@@ -128,10 +134,6 @@ namespace Marin
                 container.RegisterMvcControllers(app);
                 container.RegisterMvcViewComponents(app);
 
-                //Crosswire identity for .net
-                container.CrossWire<UserManager<MarinAppUser>>(app);
-                container.CrossWire<SignInManager<MarinAppUser>>(app);
-
                
                 //DbContext
                 container.Register<IDbContext, BudgetDbContext>(hybridLifestyle);
@@ -141,12 +143,21 @@ namespace Marin
                //Repository
                 container.Register(typeof(IRepository<>),typeof(Repository<>),hybridLifestyle);
                 
-
+                
                 // Cross-wire ASP.NET services (if any). For instance:
                 container.CrossWire<ILoggerFactory>(app);
-
+                //Crosswire identity for .net
+                container.CrossWire<UserManager<MarinAppUser>>(app);
+                container.CrossWire<SignInManager<MarinAppUser>>(app);
                 // NOTE: Do prevent cross-wired instances as much as possible.
                 // See: https://simpleinjector.org/blog/2016/07/
+
+                //Automatic migrations 
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<BudgetDbContext>();
+                    context.Database.Migrate();
+                }
             }
         }
     }

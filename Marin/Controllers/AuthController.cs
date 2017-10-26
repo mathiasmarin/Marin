@@ -37,18 +37,19 @@ namespace Marin.Controllers
                         return RedirectToAction("Index", "Home");
 
                     }
-                    else
-                    {
-                        return Redirect(returnUrl);
-                    }
-
+                    return Redirect(returnUrl);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Username or Password incorrect");
-                }
+                ModelState.AddModelError("", "Användarnamn eller lösenord är inkorrekt");
             }
             return View();
+        }
+        public async Task<IActionResult> Logout()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                await _authManager.SignOut();
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

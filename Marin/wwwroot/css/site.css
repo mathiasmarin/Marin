@@ -33,3 +33,21 @@
         display: none;
     }
 }
+.pull-right {
+    float: right;
+}
+li.right20 {
+    position: absolute;
+    right: 20px;
+}
+.right20 {
+    position: absolute;
+    right: 20px;
+}
+.padding15 {
+    padding-top: 9px;
+    padding-bottom: 15px;
+}
+li i.fa {
+    margin-left: 10px;
+}
