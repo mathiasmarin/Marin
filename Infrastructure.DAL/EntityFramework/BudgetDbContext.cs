@@ -1,17 +1,17 @@
-﻿
+﻿using System.Threading.Tasks;
+using Domain.Common;
+using Infrastructure.Security;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Data;
-using System.Threading.Tasks;
-using Domain.Common;
 
 namespace Infrastructure.DAL.EntityFramework
 {
-    public class BudgetDbContext: DbContext, IDbContext
+    public class BudgetDbContext : IdentityDbContext<MarinAppUser>, IDbContext
     {
-        private readonly IConfigurationRoot _config;
+        private readonly IConfiguration _config;
 
-        public BudgetDbContext(IConfigurationRoot config, DbContextOptions options) : base(options)
+        public BudgetDbContext(IConfiguration config) : base(new DbContextOptions<BudgetDbContext>())
         {
             _config = config;
         }
@@ -22,9 +22,10 @@ namespace Infrastructure.DAL.EntityFramework
             optionsBuilder.UseSqlServer(_config["ConnectionStrings:MyConnectionString"]);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            DataBaseBuilder.BuildDb(modelBuilder);
+            base.OnModelCreating(builder);
+            DataBaseBuilder.BuildDb(builder);
         }
 
         public DbSet<TEntity> GetSet<TEntity>() where TEntity : Entity

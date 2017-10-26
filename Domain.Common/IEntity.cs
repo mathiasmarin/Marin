@@ -5,7 +5,7 @@ namespace Domain.Common
 {
     public interface IEntity
     {
-        Guid Id { get; }
         IEnumerable<IEvent> Events { get; }
+        Guid Id { get; }
     }
 }

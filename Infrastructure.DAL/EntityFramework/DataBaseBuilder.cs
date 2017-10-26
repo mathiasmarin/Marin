@@ -1,4 +1,4 @@
-﻿using Domain.Common;
+﻿using Domain.Core;
 using Infrastructure.DAL.EntityFramework.Mappings;
 using Microsoft.EntityFrameworkCore;
 

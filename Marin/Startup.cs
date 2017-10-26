@@ -1,49 +1,99 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using Domain.Common;
+using Infrastructure.DAL;
+using Infrastructure.DAL.EntityFramework;
+using Infrastructure.DAL.EntityFramework.Seeding;
+using Infrastructure.Security;
+using Marin.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Domain.Common;
-using Infrastructure.DAL.EntityFramework;
+using Microsoft.Extensions.Options;
+using SimpleInjector;
+using SimpleInjector.Integration.AspNetCore;
+using SimpleInjector.Integration.AspNetCore.Mvc;
+using SimpleInjector.Lifestyles;
 
 namespace Marin
 {
     public class Startup
     {
-        private readonly IConfigurationRoot _configuration;
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            _configuration = builder.Build();
+            Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
+        private Container Container { get;} = new Container();
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc();
-            services.AddSingleton(_configuration);
+            services.AddScoped<IAuthManager, AuthManager>();
+            services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<BudgetDbContext>()
+                .AddDefaultTokenProviders();
+            services.AddDbContext<BudgetDbContext>(options =>
+                options.UseSqlServer(Configuration["ConnectionStrings:MyConnectionString"]));
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 6;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.LoginPath = "/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Auth/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = true;
+            });
+            services.AddTransient<Seeder>();
+            Container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddSingleton<IControllerActivator>(
+                new SimpleInjectorControllerActivator(Container));
+            services.AddSingleton<IViewComponentActivator>(
+                new SimpleInjectorViewComponentActivator(Container));
+
+            services.EnableSimpleInjectorCrossWiring(Container);
+            services.UseSimpleInjectorAspNetRequestScoping(Container);
+            Container.RegisterSingleton(() => Configuration);
            
-
-
-        }
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-           // builder.RegisterAssemblyTypes(typeof(Entity).GetTypeInfo().Assembly).AsClosedTypesOf(typeof(IQueryHandler<,>));
-            builder.RegisterType<Entity>().As<IEntity>();
-            builder.RegisterType<BudgetDbContext>().As<IDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeder seeder, SignInManager<MarinAppUser> signInManager, UserManager<MarinAppUser> userManager)
         {
-            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+           Bootstrap.InitializeContainer(app,Container);
+
+            Container.Verify();
 
             if (env.IsDevelopment())
             {
@@ -56,6 +106,7 @@ namespace Marin
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -63,6 +114,41 @@ namespace Marin
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            seeder.CreateAppUser().Wait();
+
+        }
+
+        public static class Bootstrap
+        {
+            public static void InitializeContainer(IApplicationBuilder app, Container container)
+            {
+                var hybridLifestyle = Lifestyle.CreateHybrid(new AsyncScopedLifestyle(), new ThreadScopedLifestyle());
+
+                // Add application presentation components:
+                container.RegisterMvcControllers(app);
+                container.RegisterMvcViewComponents(app);
+
+                //Crosswire identity for .net
+                container.CrossWire<UserManager<MarinAppUser>>(app);
+                container.CrossWire<SignInManager<MarinAppUser>>(app);
+
+               
+                //DbContext
+                container.Register<IDbContext, BudgetDbContext>(hybridLifestyle);
+
+                container.Register<IAuthManager,AuthManager>();
+
+               //Repository
+                container.Register(typeof(IRepository<>),typeof(Repository<>),hybridLifestyle);
+                
+
+                // Cross-wire ASP.NET services (if any). For instance:
+                container.CrossWire<ILoggerFactory>(app);
+
+                // NOTE: Do prevent cross-wired instances as much as possible.
+                // See: https://simpleinjector.org/blog/2016/07/
+            }
         }
     }
 }
+

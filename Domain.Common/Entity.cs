@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Common
 {
     public abstract class Entity : IEntity
     {
-        private readonly IDictionary<Type, IEvent> _events;
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-            _events = new ConcurrentDictionary<Type, IEvent>();
-        }
-
-        public Guid Id { get; }
+        private readonly IDictionary<Type, IEvent> _events = new ConcurrentDictionary<Type, IEvent>();
+        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; protected set; }
         public IEnumerable<IEvent> Events => _events.Values;
         /// <summary>
         /// Add event to this entity. If event of this type already exist it will be overwritten. 

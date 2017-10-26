@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Utils
+﻿namespace Utils
 {
     /// <summary>
-    /// Class used for checking conditions in system. Will throw exception i a condition fails.
+    /// Class used for checking conditions in system EXCEPT domain. Will throw exception i a condition fails.
     /// </summary>
     public static class Check
     {

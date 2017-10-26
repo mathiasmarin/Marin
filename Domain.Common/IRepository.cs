@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Domain.Common
 {
-    public interface IRepository<TEntity> where TEntity : IEntity
+    public interface IRepository<TEntity> where TEntity:Entity
     {
         void Add(TEntity entity);
         TEntity Get(Guid id);
