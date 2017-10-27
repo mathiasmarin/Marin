@@ -24,8 +24,9 @@ namespace Infrastructure.DAL.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder = DataBaseBuilder.BuildDb(builder);
             base.OnModelCreating(builder);
-            DataBaseBuilder.BuildDb(builder);
+
         }
 
         public DbSet<TEntity> GetSet<TEntity>() where TEntity : Entity

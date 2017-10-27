@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Domain.Common;
 
 namespace Domain.Core
@@ -17,7 +18,8 @@ namespace Domain.Core
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
-
+        public ICollection<BudgetCategory> BudgetCategories { get; private set; }
+        public ICollection<MonthlyBudget> Budgets { get; private set; }
         public string GetFullName()
         {
             return string.Join(" ", FirstName, LastName);
