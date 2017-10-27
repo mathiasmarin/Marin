@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Application.Common;
 using Domain.Common;
 using Infrastructure.DAL;
 using Infrastructure.DAL.EntityFramework;
 using Infrastructure.DAL.EntityFramework.Seeding;
+using Infrastructure.DAL.QueryHandlers;
 using Infrastructure.Security;
 using Marin.Controllers;
 using Microsoft.AspNetCore.Builder;
@@ -55,7 +57,7 @@ namespace Marin
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
+                options.Password.RequireLowercase = true;
                 options.Password.RequiredUniqueChars = 6;
 
                 // Lockout settings
@@ -143,8 +145,11 @@ namespace Marin
 
                //Repository
                 container.Register(typeof(IRepository<>),typeof(Repository<>),hybridLifestyle);
-                
-                
+
+                // Register all QueryHandlers
+                container.Register(typeof(IQueryHandler<,>), new[] { typeof(FindUserQueryHandler).Assembly });
+
+
                 // Cross-wire ASP.NET services (if any). For instance:
                 container.CrossWire<ILoggerFactory>(app);
                 //Crosswire identity for .net

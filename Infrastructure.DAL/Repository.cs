@@ -37,7 +37,7 @@ namespace Infrastructure.DAL
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _dbContext.SaveAsync() > 0);
+            return await _dbContext.SaveAsync() > 0;
         }
 
         public void SaveChanges()

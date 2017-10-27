@@ -1,1 +1,1 @@
-﻿// Write your JavaScript code.
+﻿const apiUrl = window.location.origin + "/api/";

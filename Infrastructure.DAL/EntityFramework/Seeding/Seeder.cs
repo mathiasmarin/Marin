@@ -24,8 +24,8 @@ namespace Infrastructure.DAL.EntityFramework.Seeding
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                var newUser = new MarinAppUser(email,email);
                 var newDomainUser = new User("Mathias", "Marin", email);
+                var newUser = new MarinAppUser(newDomainUser);
                 var result = await _userManager.CreateAsync(newUser, "@Badlösen1234");
                 if (!result.Succeeded)
                 {

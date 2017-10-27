@@ -15,7 +15,7 @@ namespace Marin.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Här kan du se din användardata";
 
             return View();
         }

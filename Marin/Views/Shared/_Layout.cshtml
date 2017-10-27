@@ -16,9 +16,9 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link href="~/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
-        <link href="~/css/sidemenu.css" rel="stylesheet" />
-    </environment>
+        <link href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/css/sidemenu.min.css" rel="stylesheet" />
+       </environment>
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -34,8 +34,14 @@
             <ul class="nav navbar-nav navbar-right right right20">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li class="padding15">@User.Identity.Name<i class="fa fa-user-o fa-2x" aria-hidden="true"></i></li>
-                    <li><a asp-controller="Auth" asp-action="Logout">Logga ut</a></li>
+                    <li class="userName">@User.Identity.Name</li>
+                    <li class="profile"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Auth" asp-action="Logout">Logga ut</a></li>
+                        </ul>
+                    </li>
                 }
                 else
                 {
@@ -66,6 +72,8 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/Vue/vue.js"></script>
+        <script src="~/lib/Bootbox/bootbox.min.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -80,7 +88,11 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/vue"
+                asp-fallback-src="~/lib/Vue/vue.min.js">
+        </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/lib/Bootbox/bootbox.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

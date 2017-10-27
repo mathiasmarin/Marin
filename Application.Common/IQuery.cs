@@ -2,6 +2,6 @@
 {
     public interface IQuery<out TResult> where TResult : class
     {
-        
+
     }
 }

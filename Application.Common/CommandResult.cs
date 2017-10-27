@@ -1,18 +1,14 @@
-﻿namespace Application.Common
+﻿using System;
+
+namespace Application.Common
 {
     public class CommandResult
     {
-        private readonly object _result;
-
         public CommandResult(object result)
         {
-            _result = result;
+            Result = result;
         }
 
-        public object GetResult()
-        {
-            return _result;
-        }
-
+        public object Result { get; }
     }
 }

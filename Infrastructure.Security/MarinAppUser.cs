@@ -1,4 +1,5 @@
 ﻿using System;
+using Domain.Core;
 using Microsoft.AspNetCore.Identity;
 using Utils;
 
@@ -6,11 +7,9 @@ namespace Infrastructure.Security
 {
     public sealed class MarinAppUser: IdentityUser
     {
-        public MarinAppUser(string userName, string email) : base(userName)
+        public MarinAppUser(User domainUser) : base(domainUser.Email)
         {
-            Check.Require(!string.IsNullOrWhiteSpace(email));
-            Check.Require(!string.IsNullOrWhiteSpace(userName));
-            Email = email;
+            Email = domainUser.Email;
         }
 
         #region Do not use
