@@ -26,5 +26,5 @@
                 });
             }
         }
-    }).$mount("#testPage");
+    }).$mount("#aboutPage");
 })();

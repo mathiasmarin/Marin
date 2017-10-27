@@ -1,7 +1,6 @@
 ﻿using System;
 using Domain.Core;
 using Microsoft.AspNetCore.Identity;
-using Utils;
 
 namespace Infrastructure.Security
 {

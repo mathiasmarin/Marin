@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Application.Common
+﻿namespace Application.Common
 {
     public class CommandResult
     {

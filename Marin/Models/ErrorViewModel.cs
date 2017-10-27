@@ -1,5 +1,3 @@
-using System;
-
 namespace Marin.Models
 {
     public class ErrorViewModel

@@ -55,8 +55,9 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Startsida</a></li>
-                <li><a asp-area="" asp-controller="Home" asp-action="About">Mina budgetar</a></li>
                 <li><a asp-area="" asp-controller="Home" asp-action="Contact">Skapa ny budget</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="About">Om sidan</a></li>
+
             }
         </ul>
     </div>

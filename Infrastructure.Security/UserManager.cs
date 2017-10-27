@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Domain.Common;
 using Domain.Core;
 using Microsoft.AspNetCore.Identity;
-using Utils;
 
 namespace Infrastructure.Security
 {

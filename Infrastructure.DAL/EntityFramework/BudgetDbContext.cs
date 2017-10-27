@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Domain.Common;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

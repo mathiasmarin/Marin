@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
+using System.Reflection;
 using Application.Common;
 using Domain.Common;
 using Infrastructure.DAL;
@@ -8,23 +7,17 @@ using Infrastructure.DAL.EntityFramework;
 using Infrastructure.DAL.EntityFramework.Seeding;
 using Infrastructure.DAL.QueryHandlers;
 using Infrastructure.Security;
-using Marin.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SimpleInjector;
-using SimpleInjector.Integration.AspNetCore;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 
@@ -148,6 +141,11 @@ namespace Marin
 
                 // Register all QueryHandlers
                 container.Register(typeof(IQueryHandler<,>), new[] { typeof(FindUserQueryHandler).Assembly });
+
+                //Register simpleinjector event dispatcher
+                container.Register<IEventDispatcher,SimpleInjectorEventDispatcher>(Lifestyle.Singleton);
+
+                container.RegisterCollection(typeof(IEventHandler<>), Assembly.GetExecutingAssembly());
 
 
                 // Cross-wire ASP.NET services (if any). For instance:
