@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Domain.Common;
 using Infrastructure.DAL.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DAL
 {
@@ -23,6 +26,17 @@ namespace Infrastructure.DAL
         public TEntity Get(Guid id)
         {
             return _dbContext.GetSet<TEntity>().FirstOrDefault(x => x.Id.Equals(id));
+        }
+
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] paths)
+        {
+            var result = _dbContext.GetSet<TEntity>().Where(filter);
+            if (!paths.Any()) return result;
+            foreach (var expression in paths)
+            {
+                result = result.Include(expression);
+            }
+            return result;
         }
 
         public void Remove(TEntity entity)

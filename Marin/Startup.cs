@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Application.Common;
+using Application.Core.CommandHandlers;
 using Domain.Common;
 using Infrastructure.DAL;
 using Infrastructure.DAL.EntityFramework;
@@ -69,7 +70,7 @@ namespace Marin
                 options.Cookie.Expiration = TimeSpan.FromDays(150);
                 options.LoginPath = "/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
                 options.LogoutPath = "/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Auth/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.AccessDeniedPath = "/Auth/Login"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
             services.AddTransient<Seeder>();
@@ -136,11 +137,14 @@ namespace Marin
                 container.Register<IAuthManager,AuthManager>();
                 container.Register<IUserManager,UserManager>();
 
-               //Repository
+                //Repository
                 container.Register(typeof(IRepository<>),typeof(Repository<>),hybridLifestyle);
 
                 // Register all QueryHandlers
                 container.Register(typeof(IQueryHandler<,>), new[] { typeof(FindUserQueryHandler).Assembly });
+
+                //Register all commandhandler
+                container.Register(typeof(ICommandHandler<>),new []{typeof(AddCategoriesCommandHandler).Assembly});
 
                 //Register simpleinjector event dispatcher
                 container.Register<IEventDispatcher,SimpleInjectorEventDispatcher>(Lifestyle.Singleton);
@@ -156,7 +160,7 @@ namespace Marin
                 // NOTE: Do prevent cross-wired instances as much as possible.
                 // See: https://simpleinjector.org/blog/2016/07/
 
-                //Automatic migrations 
+                //Run latest migration 
                 using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetRequiredService<BudgetDbContext>();

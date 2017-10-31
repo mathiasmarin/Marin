@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System;
+using Domain.Common;
 
 namespace Domain.Core
 {
@@ -11,6 +12,18 @@ namespace Domain.Core
         }
 
         public string Name { get; private set; }
-        
+
+        #region Do not use
+        /// <summary>
+        /// For EF
+        /// </summary>
+        [Obsolete]
+        private BudgetCategory()
+        {
+
+        }
+
+        #endregion
+
     }
 }

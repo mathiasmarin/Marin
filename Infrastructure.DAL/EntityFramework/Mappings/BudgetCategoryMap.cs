@@ -9,6 +9,7 @@ namespace Infrastructure.DAL.EntityFramework.Mappings
         public void Configure(EntityTypeBuilder<BudgetCategory> builder)
         {
             builder.ToTable("BudgetCategory");
+            
         }
     }
 }

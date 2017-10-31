@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Domain.Common
@@ -7,6 +9,7 @@ namespace Domain.Common
     {
         void Add(TEntity entity);
         TEntity Get(Guid id);
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] paths);
         void Remove(TEntity entity);
         void Modify(TEntity entity);
         Task<bool> SaveChangesAsync();

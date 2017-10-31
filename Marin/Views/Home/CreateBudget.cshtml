@@ -1,0 +1,56 @@
+﻿@section Scripts
+{
+    <script src="~/js/CreateBudget.js"></script>
+}
+
+
+<div id="createBudgetApp">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Här kan du skapa din budget</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="#">Skapa kategorier</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Skapa månadsbuget</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Skapa händelse</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label for="categoryName">Kategorinamn</label>
+            <input v-model="categoryName" id="categoryName" type="text" />
+            <button class="btn btn-primary" v-on:click="addCategory()">Skapa kategori</button>
+        </div>
+    </div>
+    <div class="row" v-if="categories.length > 0">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Kategori</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(category,index) in categories">
+                    <td>{{category}}</td>
+                    <td><button v-on:click="removeCategory(index)" class="btn btn-danger btn-xs pull-right">Ta bort</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12">
+            <button class="btn btn-primary pull-right" v-on:click="saveCategories()">Spara kategorier</button>
+        </div>
+    </div>
+    </div>

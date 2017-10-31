@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Common;
 
 namespace Domain.Core
@@ -23,6 +24,15 @@ namespace Domain.Core
         public string GetFullName()
         {
             return string.Join(" ", FirstName, LastName);
+        }
+
+        public void AddCategories(ICollection<BudgetCategory> categories)
+        {
+            this.Require(categories.Any());
+            if (BudgetCategories == null)
+            {
+                BudgetCategories = categories.ToList();
+            }
         }
         /// <summary>
         /// Ef requires empty Ctor. Do not use

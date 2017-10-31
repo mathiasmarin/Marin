@@ -14,7 +14,6 @@ namespace Domain.Core
             CostValue = costValue;
             Description = description;
         }
-
         public BudgetCategory Category { get; set; }
         public DateTime Date { get; private set; }
         public double CostValue { get; private set; }
