@@ -19,7 +19,7 @@ namespace Application.Core.CommandHandlers
 
         public CommandResult HandleCommand(AddCategoriesCommand command)
         {
-            var user = _userRepository.GetFiltered(x => x.Email.Equals(command.UserName), h => h.BudgetCategories,p => p.Budgets).FirstOrDefault();
+            var user = _userRepository.GetFiltered(x => x.Email.Equals(command.UserName), h => h.BudgetCategories, p => p.Budgets).FirstOrDefault();
             var result = new List<BudgetCategory>();
             foreach (var category in command.Categories)
             {

@@ -39,7 +39,6 @@ namespace Marin
         {
 
             services.AddMvc();
-            services.AddScoped<IAuthManager, AuthManager>();
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<BudgetDbContext>()
                 .AddDefaultTokenProviders();
             services.AddDbContext<BudgetDbContext>(options =>
@@ -145,6 +144,8 @@ namespace Marin
 
                 //Register all commandhandler
                 container.Register(typeof(ICommandHandler<>),new []{typeof(AddCategoriesCommandHandler).Assembly});
+                //Transaction decorator
+                container.RegisterDecorator(typeof(ICommandHandler<>),typeof(TransactionScopeDecorator<>));
 
                 //Register simpleinjector event dispatcher
                 container.Register<IEventDispatcher,SimpleInjectorEventDispatcher>(Lifestyle.Singleton);

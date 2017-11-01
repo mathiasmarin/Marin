@@ -11,7 +11,6 @@ namespace Domain.Common
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; protected set; }
-        public DateTime Created { get; } = DateTime.Now;
         public IEnumerable<IEvent> Events => _events.Values;
         /// <summary>
         /// Add event to this entity. If event of this type already exist it will be overwritten. 

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.DAL.EntityFramework
 {
@@ -9,5 +10,7 @@ namespace Infrastructure.DAL.EntityFramework
         DbSet<TEntity> GetSet<TEntity>() where TEntity : Entity;
         Task<int> SaveAsync();
         void SaveSync();
+        IDbContextTransaction BeginTransaction();
+
     }
 }

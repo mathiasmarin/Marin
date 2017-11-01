@@ -3,10 +3,24 @@ using System;
 
 namespace Infrastructure.DAL.Migrations
 {
-    public partial class AddBudgetV1 : Migration
+    public partial class AddingBaseEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "BudgetCategory",
                 columns: table => new
@@ -105,6 +119,9 @@ namespace Infrastructure.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "MonthlyBudget");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

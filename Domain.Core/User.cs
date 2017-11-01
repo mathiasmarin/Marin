@@ -33,6 +33,13 @@ namespace Domain.Core
             {
                 BudgetCategories = categories.ToList();
             }
+            else
+            {
+                foreach (var cat in categories)
+                {
+                    BudgetCategories.Add(cat);
+                }
+            }
         }
         /// <summary>
         /// Ef requires empty Ctor. Do not use

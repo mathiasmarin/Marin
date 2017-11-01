@@ -3,6 +3,7 @@ using Domain.Common;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.DAL.EntityFramework
@@ -24,9 +25,12 @@ namespace Infrastructure.DAL.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder = DataBaseBuilder.BuildDb(builder);
             base.OnModelCreating(builder);
 
+            // Customizations must go after base.OnModelCreating(builder) Ref: https://scottsauber.com/2017/09/11/customizing-ef-core-2-0-with-ientitytypeconfiguration/
+
+            DataBaseBuilder.BuildDb(builder);
+            
         }
 
         public DbSet<TEntity> GetSet<TEntity>() where TEntity : Entity
@@ -42,6 +46,11 @@ namespace Infrastructure.DAL.EntityFramework
         public void SaveSync()
         {
             SaveChanges();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return Database.BeginTransaction();
         }
     }
 }

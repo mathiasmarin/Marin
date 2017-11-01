@@ -11,8 +11,8 @@ using System;
 namespace Infrastructure.DAL.Migrations
 {
     [DbContext(typeof(BudgetDbContext))]
-    [Migration("20171027144121_AddBudgetV1")]
-    partial class AddBudgetV1
+    [Migration("20171101154620_AddingBaseEntities")]
+    partial class AddingBaseEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Domain.Core;
 using Infrastructure.Security;
@@ -33,6 +34,8 @@ namespace Infrastructure.DAL.EntityFramework.Seeding
                 }
                 _dbContext.Add(newDomainUser);
                 _dbContext.SaveSync();
+                await _userManager.AddClaimAsync(newUser, new Claim("UserId", newDomainUser.Id.ToString()));
+                await _userManager.UpdateAsync(newUser);
 
             }
 

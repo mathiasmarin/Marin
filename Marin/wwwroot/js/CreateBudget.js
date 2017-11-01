@@ -31,7 +31,7 @@
                     }),
                     success: function (response) {
                         if (response) {
-                            self.user = response;
+                            CreateConfirmModal("Kategorier sparades");
                         }
                     },
                     error: function (error) {

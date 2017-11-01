@@ -1,6 +1,7 @@
 ﻿using System;
 using Application.Common;
 using Application.Core.Commands;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,11 @@ namespace Marin.Controllers.Api
         }
         [HttpPost]
         [Route("Categories")]
-        public void AddCategories([FromBody]AddCategoriesCommand command)
+        public Guid AddCategories([FromBody]AddCategoriesCommand command)
         {
             command.UserName = User.Identity.Name;
-            _addCategoriesCommandHandler.HandleCommand(command);
+            var test = User.Identity.GetUserId();
+            return (Guid) _addCategoriesCommandHandler.HandleCommand(command).Result;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using Application.Common;
 using Application.Core.Dtos;
 using Application.Core.Queries;
@@ -22,7 +24,8 @@ namespace Marin.Controllers.Api
         [Route("")]
         public UserDto GetUser(FindUserQuery query)
         {
-            return _findUserQueryHandler.HandleQuery(new FindUserQuery {UserName = User.Identity.Name});
+            var result = _findUserQueryHandler.HandleQuery(new FindUserQuery {UserName = User.Identity.Name});
+            return result;
         }
     }
 }
