@@ -14,8 +14,7 @@ namespace Infrastructure.Security
 
         public async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe)
         {
-            var hej =  await _signInManager.PasswordSignInAsync(userName, password, false, false);
-            return hej;
+           return await _signInManager.PasswordSignInAsync(userName, password, false, false);
         }
 
         public async Task SignOut()

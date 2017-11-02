@@ -10,7 +10,7 @@ namespace Infrastructure.DAL.QueryHandlers
 {
     public class FindUserQueryHandler: IQueryHandler<FindUserQuery,UserDto>
     {
-        private readonly IDbContext _dbContext;
+        private readonly IDbQueryable _dbContext;
 
         public FindUserQueryHandler(IDbContext dbContext)
         {

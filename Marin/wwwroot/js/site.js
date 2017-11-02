@@ -1,8 +1,4 @@
 ﻿const apiUrl = window.location.origin + "/api/";
-bootbox.setDefaults({
-    locale: "sv",
-    backdrop: "static", // Disables close modal on click-outside. 
-});
 function CreateConfirmModal(message) {
     /// <summary>Create a bootbox green check modal with a input message.</summary>
     var msg =
@@ -11,6 +7,24 @@ function CreateConfirmModal(message) {
             '</div>';
     bootbox.alert({
         title: "Resultat",
+        message: msg,
+        buttons: {
+            ok: {
+                label: "OK",
+                className: "btn btn-primary"
+            }
+        }
+    });
+
+}
+function CreateErrorModal(errorResponseText) {
+    /// <summary>Create a bootbox red triangle warning modal when api call resulted in error</summary>
+    var msg =
+        '<div class="row text-center"><i class="fa fa-exclamation-triangle fa-5x text-danger"></i></div><div class="row text-center"> Något gick fel: ' +
+            message +
+            '</div>';
+    bootbox.alert({
+        title: "Varning",
         message: msg,
         buttons: {
             ok: {

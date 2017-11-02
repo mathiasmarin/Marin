@@ -5,7 +5,6 @@ using Application.Core.CommandHandlers;
 using Domain.Common;
 using Infrastructure.DAL;
 using Infrastructure.DAL.EntityFramework;
-using Infrastructure.DAL.EntityFramework.Seeding;
 using Infrastructure.DAL.QueryHandlers;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
@@ -38,7 +38,11 @@ namespace Marin
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(config =>
+            {
+                config.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
+            services.AddSingleton(Configuration);
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<BudgetDbContext>()
                 .AddDefaultTokenProviders();
             services.AddDbContext<BudgetDbContext>(options =>
@@ -72,7 +76,6 @@ namespace Marin
                 options.AccessDeniedPath = "/Auth/Login"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
                 options.SlidingExpiration = true;
             });
-            services.AddTransient<Seeder>();
             Container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -84,12 +87,11 @@ namespace Marin
 
             services.EnableSimpleInjectorCrossWiring(Container);
             services.UseSimpleInjectorAspNetRequestScoping(Container);
-            Container.RegisterSingleton(() => Configuration);
            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeder seeder)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
            Bootstrap.InitializeContainer(app,Container);
 
@@ -115,7 +117,6 @@ namespace Marin
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            seeder.CreateAppUser().Wait();
 
         }
 
@@ -154,6 +155,7 @@ namespace Marin
 
 
                 // Cross-wire ASP.NET services (if any). For instance:
+                container.CrossWire<IConfiguration>(app);
                 container.CrossWire<ILoggerFactory>(app);
                 //Crosswire identity for .net
                 container.CrossWire<UserManager<MarinAppUser>>(app);

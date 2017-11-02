@@ -29,8 +29,8 @@ namespace Infrastructure.Security
             }
             _userRepository.Add(newUser);
             _userRepository.SaveChanges();
-            var newClaim = await _userManager.AddClaimAsync(appUser, new Claim("UserId", newUser.Id.ToString()));
-            var savedS = await _userManager.UpdateAsync(appUser);
+            await _userManager.AddClaimAsync(appUser, new Claim("UserId", newUser.Id.ToString()));
+            await _userManager.UpdateAsync(appUser);
             return result;
         }
     }

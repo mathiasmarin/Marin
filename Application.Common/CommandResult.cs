@@ -2,7 +2,7 @@
 {
     public class CommandResult
     {
-        public CommandResult(object result)
+        public CommandResult(object result = null)
         {
             Result = result;
         }
