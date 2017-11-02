@@ -32,5 +32,11 @@
     "inputFiles": [
       "wwwroot/js/About.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/CreateBudget.min.js",
+    "inputFiles": [
+      "wwwroot/js/CreateBudget.js"
+    ]
   }
 ]

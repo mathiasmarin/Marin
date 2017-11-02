@@ -3,7 +3,7 @@
     <script src="~/js/CreateBudget.js"></script>
 }
 
-<div id="createBudgetApp">
+<div id="createBudgetApp" v-cloak>
     <div class="row">
         <div class="col-md-12">
             <h3>Här kan du skapa din budget</h3>
@@ -28,7 +28,7 @@
         <div class="col-md-12">
             <label for="categoryName">Kategorinamn</label>
             <input v-model="categoryName" id="categoryName" type="text" />
-            <button class="btn btn-primary" v-on:click="addCategory()">Skapa kategori</button>
+            <button class="btn btn-primary" v-bind:disabled="!categoryName" v-on:click="addCategory()">Skapa kategori</button>
         </div>
     </div>
     <div class="row">

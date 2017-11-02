@@ -40,7 +40,7 @@ namespace Marin
 
             services.AddMvc().AddJsonOptions(config =>
             {
-                config.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                config.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Makes all json objects look exactly the same as the original .net object. Keeps CamelCase on properties for example.
             });
             services.AddSingleton(Configuration);
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<BudgetDbContext>()
