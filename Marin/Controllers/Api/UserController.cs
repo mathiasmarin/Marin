@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using Application.Common;
 using Application.Core.Dtos;
 using Application.Core.Queries;

@@ -14,8 +14,8 @@ namespace Marin.Controllers
 
         public AuthController(IAuthManager authManager, IUserManager userManager, IEmailSender emailSender)
         {
-            _authManager = authManager;
-            _userManager = userManager;
+            _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
