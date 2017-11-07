@@ -10,11 +10,13 @@ namespace Marin.Controllers
     {
         private readonly IAuthManager _authManager;
         private readonly IUserManager _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public AuthController(IAuthManager authManager, IUserManager userManager)
+        public AuthController(IAuthManager authManager, IUserManager userManager, IEmailSender emailSender)
         {
             _authManager = authManager;
             _userManager = userManager;
+            _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         public IActionResult Login()
@@ -30,6 +32,16 @@ namespace Marin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(vm.Username);
+                if (user != null)
+                {
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            "Du måste ha en verifierad e-post för att logga in");
+                        return View(vm);
+                    }
+                }
                 var signinResult = await _authManager.PasswordSignInAsync(vm.Username, vm.Password, false);
 
                 if (signinResult.Succeeded)
@@ -64,18 +76,49 @@ namespace Marin.Controllers
             if (ModelState.IsValid)
             {
                 var signinResult = await _userManager.CreateUser(vm.FirstName, vm.LastName, vm.Email, vm.Password);
-
+                
                 if (signinResult.Succeeded)
                 {
-                    if (String.IsNullOrWhiteSpace(returnUrl))
-                    {
-                        return RedirectToAction("Index", "Home");
+                    var user = _userManager.FindByEmailAsync(vm.Email).Result;
 
-                    }
-                    return Redirect(returnUrl);
+                    var code = _userManager.CreateEmailConfirmationToken(user);
+
+                    string confirmationLink = Url.Action("ConfirmEmail",
+                        "Auth", new
+                        {
+                            useremail = user.Email,
+                            token = code
+                        },
+                        HttpContext.Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(user.Email, "Bekräfta e-post",
+                        $"Klicka på följande länk för att bekräfta din e-post: {confirmationLink}");
+                    return RedirectToAction("ConfirmEmailSent");
                 }
                 ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
             }
+            return View();
+        }
+
+        public IActionResult ConfirmEmail(string userEmail, string token)
+        {
+            var user = _userManager.FindByEmailAsync(userEmail);
+
+            var result = _userManager.ConfirmEmailAsync(user.Result, token);
+            if (result.Result.Succeeded)
+            {
+                return View();
+
+            }
+            else
+            {
+                ModelState.AddModelError("","Det gick inte att bekräfta e-posten för denna användare");
+                return View();
+            }
+        }
+
+        public IActionResult ConfirmEmailSent()
+        {
             return View();
         }
     }
