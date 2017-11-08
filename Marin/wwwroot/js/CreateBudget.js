@@ -6,23 +6,23 @@
         },
         data: function () {
             return {
-                savedCategories:[],
+                savedCategories: [],
                 categories: [],
                 categoryName: ""
             }
         },
         methods: {
-            addCategory: function() {
+            addCategory: function () {
                 const self = this;
                 self.categories.push(self.categoryName);
                 self.categoryName = "";
             },
-            removeCategory: function(index) {
+            removeCategory: function (index) {
                 const self = this;
                 self.categories.splice(index, 1);
 
             },
-            deleteCategory: function(id, index) {
+            deleteCategory: function (id, index) {
                 const self = this;
                 var msg = '<div class="row text-center"><i class="fa fa-exclamation-triangle fa-5x text-danger"></i></div><div class="row text-center">Vil du ta bort denna kategori?</div>';
                 bootbox.confirm({
@@ -31,11 +31,11 @@
                     buttons: {
                         cancel: {
                             label: '<i class="fa fa-times"></i> Avbryt',
-                            className:'btn-danger'
+                            className: 'btn-danger'
                         },
                         confirm: {
                             label: '<i class="fa fa-check"></i> Ta bort',
-                            className:'btn-success'
+                            className: 'btn-success'
                         }
                     },
                     callback: function (result) {
@@ -55,9 +55,9 @@
                         }
                     }
                 });
-                
+
             },
-            saveCategories: function() {
+            saveCategories: function () {
                 const self = this;
                 $.ajax({
                     url: apiUrl + "Budget/Categories",
@@ -67,9 +67,9 @@
                         Categories: self.categories
                     }),
                     success: function (response) {
-                        if (response) {
-                            CreateConfirmModal("Kategorier sparades");
-                        }
+                        CreateConfirmModal("Kategorier sparades");
+                        self.categories = [];
+                        self.getAllCategories();
                     },
                     error: function (error) {
                         CreateErrorModal(error.responseText);
@@ -77,7 +77,7 @@
                     }
                 });
             },
-            getAllCategories: function() {
+            getAllCategories: function () {
                 const self = this;
                 $.ajax({
                     url: apiUrl + "Budget/Categories",

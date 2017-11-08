@@ -4,8 +4,7 @@
  
 }
 @section Scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @await  Html.PartialAsync("_ValidationScriptsPartial")
 }
 <div class="row">
     <div class="col-md-4">
@@ -38,7 +37,7 @@
                 <input asp-for="PasswordConfirm" class="form-control" />
                 <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Register</button>
+            <button type="submit" class="btn btn-primary">Registrera användare</button>
         </form>
     </div>
 </div>

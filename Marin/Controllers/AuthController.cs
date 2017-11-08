@@ -92,7 +92,8 @@ namespace Marin.Controllers
                         HttpContext.Request.Scheme);
 
                     await _emailSender.SendEmailAsync(user.Email, "Bekräfta e-post",
-                        $"Klicka på följande länk för att bekräfta din e-post: {confirmationLink}");
+                        $"Klicka på följande länk för att bekräfta din e-post: " +
+                        $"<a href={confirmationLink}>Bekräfta e-post</a>");
                     return RedirectToAction("ConfirmEmailSent");
                 }
                 ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
