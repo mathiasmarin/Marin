@@ -28,10 +28,10 @@ namespace Marin.Controllers.Api
         }
         [HttpPost]
         [Route("Categories")]
-        public Guid AddCategories([FromBody]AddCategoriesCommand command)
+        public void AddCategories([FromBody]AddCategoriesCommand command)
         {
             command.UserName = User.Identity.Name;
-            return (Guid) _addCategoriesCommandHandler.Execute(command).Result;
+            _addCategoriesCommandHandler.Execute(command);
         }
         [HttpGet]
         [Route("Categories")]
