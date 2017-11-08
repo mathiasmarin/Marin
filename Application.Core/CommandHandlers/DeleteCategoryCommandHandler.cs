@@ -15,16 +15,13 @@ namespace Application.Core.CommandHandlers
             _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
-        public CommandResult HandleCommand(DeleteCategoryCommand command)
+        public void Execute(DeleteCategoryCommand command)
         {
             var cat = _categoryRepository.Get(command.Id);
 
             _categoryRepository.Remove(cat);
 
             _categoryRepository.SaveChanges();
-
-            return new CommandResult();
-
 
         }
     }

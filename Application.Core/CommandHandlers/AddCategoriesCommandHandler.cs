@@ -17,7 +17,7 @@ namespace Application.Core.CommandHandlers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        public CommandResult HandleCommand(AddCategoriesCommand command)
+        public void Execute(AddCategoriesCommand command)
         {
             var user = _userRepository.GetFiltered(x => x.Email.Equals(command.UserName), h => h.BudgetCategories, p => p.Budgets).FirstOrDefault();
             var result = new List<BudgetCategory>();
@@ -31,10 +31,6 @@ namespace Application.Core.CommandHandlers
             _userRepository.Modify(user);
 
             _userRepository.SaveChanges();
-
-
-            return new CommandResult(user.Id);
-
 
         }
     }

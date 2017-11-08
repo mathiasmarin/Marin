@@ -31,7 +31,7 @@ namespace Marin.Controllers.Api
         public Guid AddCategories([FromBody]AddCategoriesCommand command)
         {
             command.UserName = User.Identity.Name;
-            return (Guid) _addCategoriesCommandHandler.HandleCommand(command).Result;
+            return (Guid) _addCategoriesCommandHandler.Execute(command).Result;
         }
         [HttpGet]
         [Route("Categories")]
@@ -46,7 +46,7 @@ namespace Marin.Controllers.Api
         [Route("Category/{Id}")]
         public void DeleteCategory([FromHeader] DeleteCategoryCommand command)
         {
-            _deleteCategoryCommandHandler.HandleCommand(command);
+            _deleteCategoryCommandHandler.Execute(command);
         }
     }
 }
