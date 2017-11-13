@@ -9,6 +9,8 @@ namespace Infrastructure.Security
         Task<MarinAppUser> FindByEmailAsync(string email);
         Task<bool> IsEmailConfirmedAsync(MarinAppUser user);
         string CreateEmailConfirmationToken(MarinAppUser user);
+        string CreatePasswordResetToken(MarinAppUser user);
         Task<IdentityResult> ConfirmEmailAsync(MarinAppUser user, string code);
+        Task<IdentityResult> ResetPasswordAsync(MarinAppUser user, string code, string newPassword);
     }
 }

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace Infrastructure.DAL.Migrations
+namespace Infrastructure.DAL.Migrations.SecurityDb
 {
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

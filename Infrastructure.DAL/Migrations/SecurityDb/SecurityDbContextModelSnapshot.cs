@@ -3,97 +3,19 @@ using Infrastructure.DAL.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace Infrastructure.DAL.Migrations
+namespace Infrastructure.DAL.Migrations.SecurityDb
 {
-    [DbContext(typeof(BudgetDbContext))]
-    [Migration("20171101154620_AddingBaseEntities")]
-    partial class AddingBaseEntities
+    [DbContext(typeof(SecurityDbContext))]
+    partial class SecurityDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Domain.Core.BudgetCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BudgetCategory");
-                });
-
-            modelBuilder.Entity("Domain.Core.Cost", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid?>("CategoryId");
-
-                    b.Property<double>("CostValue");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("Description");
-
-                    b.Property<Guid?>("MonthlyBudgetId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("MonthlyBudgetId");
-
-                    b.ToTable("Cost");
-                });
-
-            modelBuilder.Entity("Domain.Core.MonthlyBudget", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Income");
-
-                    b.Property<string>("Month");
-
-                    b.Property<Guid?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("MonthlyBudget");
-                });
-
-            modelBuilder.Entity("Domain.Core.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
-                });
 
             modelBuilder.Entity("Infrastructure.Security.MarinAppUser", b =>
                 {
@@ -252,31 +174,6 @@ namespace Infrastructure.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Domain.Core.BudgetCategory", b =>
-                {
-                    b.HasOne("Domain.Core.User")
-                        .WithMany("BudgetCategories")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Domain.Core.Cost", b =>
-                {
-                    b.HasOne("Domain.Core.BudgetCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("Domain.Core.MonthlyBudget")
-                        .WithMany("Costs")
-                        .HasForeignKey("MonthlyBudgetId");
-                });
-
-            modelBuilder.Entity("Domain.Core.MonthlyBudget", b =>
-                {
-                    b.HasOne("Domain.Core.User")
-                        .WithMany("Budgets")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

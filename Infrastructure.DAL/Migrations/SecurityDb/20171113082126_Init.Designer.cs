@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace Infrastructure.DAL.Migrations
+namespace Infrastructure.DAL.Migrations.SecurityDb
 {
-    [DbContext(typeof(BudgetDbContext))]
-    [Migration("20171101153808_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(SecurityDbContext))]
+    [Migration("20171113082126_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

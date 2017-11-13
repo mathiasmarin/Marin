@@ -19,6 +19,7 @@
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" type="password" />
                 <span asp-validation-for="Password"></span>
+                <span><a href="@Url.Action("ForgotPassword")">Glömt lösenord?</a></span>
             </div>
             <div class="form-group">
                 <input value="Logga in" class="btn btn-success" type="submit" />

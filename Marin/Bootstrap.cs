@@ -66,7 +66,9 @@ namespace Marin
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<BudgetDbContext>();
+                var securityDbContext = serviceScope.ServiceProvider.GetRequiredService<SecurityDbContext>();
                 context.Database.Migrate();
+                securityDbContext.Database.Migrate();
             }
         }
     }

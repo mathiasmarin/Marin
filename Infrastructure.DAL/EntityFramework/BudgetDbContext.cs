@@ -1,14 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Domain.Common;
-using Infrastructure.Security;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.DAL.EntityFramework
 {
-    public class BudgetDbContext : IdentityDbContext<MarinAppUser>, IDbContext
+    public class BudgetDbContext :DbContext, IDbContext
     {
         private readonly IConfiguration _config;
 

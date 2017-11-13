@@ -3,7 +3,7 @@ using System;
 
 namespace Infrastructure.DAL.Migrations
 {
-    public partial class AddingBaseEntities : Migration
+    public partial class InitialDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

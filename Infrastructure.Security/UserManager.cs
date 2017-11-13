@@ -37,6 +37,7 @@ namespace Infrastructure.Security
         public async Task<MarinAppUser> FindByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+            
         }
 
         public async Task<bool> IsEmailConfirmedAsync(MarinAppUser user)
@@ -50,9 +51,19 @@ namespace Infrastructure.Security
 
         }
 
+        public string CreatePasswordResetToken(MarinAppUser user)
+        {
+            return _userManager.GeneratePasswordResetTokenAsync(user).Result;
+        }
+
         public async Task<IdentityResult> ConfirmEmailAsync(MarinAppUser user, string code)
         {
             return await _userManager.ConfirmEmailAsync(user, code);
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(MarinAppUser user, string code, string newPassword)
+        {
+            return await _userManager.ResetPasswordAsync(user, code, newPassword);
         }
     }
 }

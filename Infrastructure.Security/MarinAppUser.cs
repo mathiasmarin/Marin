@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Security
 {
+    
     /// <inheritdoc />
     /// <summary>
     /// This maps to a domainuser. Domainuser should never have login information, therefore there are two types of users.
