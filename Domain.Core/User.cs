@@ -37,6 +37,7 @@ namespace Domain.Core
             {
                 foreach (var cat in categories)
                 {
+                    if(BudgetCategories.Any(h => h.Name.Equals(cat.Name))) continue;
                     BudgetCategories.Add(cat);
                 }
             }

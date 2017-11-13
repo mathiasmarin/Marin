@@ -20,12 +20,9 @@ namespace Application.Core.CommandHandlers
         public void Execute(AddCategoriesCommand command)
         {
             var user = _userRepository.GetFiltered(x => x.Email.Equals(command.UserName), h => h.BudgetCategories, p => p.Budgets).FirstOrDefault();
-            var result = new List<BudgetCategory>();
-            foreach (var category in command.Categories)
-            {
-                var cat = new BudgetCategory(category);
-                result.Add(cat);
-            }
+
+            var result = command.Categories.Select(category => new BudgetCategory(category)).ToList();
+
             user.AddCategories(result);
 
             _userRepository.Modify(user);
