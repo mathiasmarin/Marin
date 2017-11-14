@@ -20,7 +20,7 @@ namespace Marin.Controllers.Api
 
         [HttpGet]
         [Route("")]
-        public UserDto GetUser(FindUserQuery query)
+        public UserDto GetUser()
         {
             var result = _findUserQueryHandler.HandleQuery(new FindUserQuery {UserName = User.Identity.Name});
             return result;

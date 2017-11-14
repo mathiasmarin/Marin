@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Application.Common;
 using Application.Core.Commands;
@@ -19,7 +18,7 @@ namespace Application.Core.CommandHandlers
 
         public void Execute(AddCategoriesCommand command)
         {
-            var user = _userRepository.GetFiltered(x => x.Email.Equals(command.UserName), h => h.BudgetCategories, p => p.Budgets).FirstOrDefault();
+            var user = _userRepository.GetFiltered(x => x.Id.Equals(command.UserId), h => h.BudgetCategories, p => p.Budgets).FirstOrDefault();
 
             var result = command.Categories.Select(category => new BudgetCategory(category)).ToList();
 

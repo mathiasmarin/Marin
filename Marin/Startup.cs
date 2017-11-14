@@ -35,6 +35,7 @@ namespace Marin
             {
                 config.SerializerSettings.ContractResolver = new DefaultContractResolver(); //Makes all json objects look exactly the same as the original .net object. Keeps CamelCase on properties for example.
             });
+            services.AddMemoryCache();
             services.AddSingleton(Configuration);
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<SecurityDbContext>()
                 .AddDefaultTokenProviders();

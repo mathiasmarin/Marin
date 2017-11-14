@@ -30,7 +30,7 @@ namespace Marin.Controllers.Api
         [Route("Categories")]
         public void AddCategories([FromBody]AddCategoriesCommand command)
         {
-            command.UserName = User.Identity.Name;
+            command.UserId = User.Identity.GetUserId();
             _addCategoriesCommandHandler.Execute(command);
         }
         [HttpGet]

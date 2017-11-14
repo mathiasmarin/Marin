@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Application.Common;
 using Application.Core.CommandHandlers;
+using Application.Core.Decorators;
 using Domain.Common;
 using Infrastructure.DAL;
 using Infrastructure.DAL.EntityFramework;
@@ -9,6 +10,7 @@ using Infrastructure.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -40,10 +42,14 @@ namespace Marin
             // Register all QueryHandlers
             container.Register(typeof(IQueryHandler<,>), new[] { typeof(FindUserQueryHandler).Assembly });
 
+            container.RegisterDecorator(typeof(IQueryHandler<,>),typeof(CacheDecorator<,>));
+
             //Register all commandhandler
             container.Register(typeof(ICommandHandler<>), new[] { typeof(AddCategoriesCommandHandler).Assembly });
             //Transaction decorator
             container.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionScopeDecorator<>));
+            //Cache remover
+            container.RegisterDecorator(typeof(ICommandHandler<>), typeof(CacheRemover<>));
 
             //Register simpleinjector event dispatcher
             container.Register<IEventDispatcher, SimpleInjectorEventDispatcher>(Lifestyle.Singleton);
@@ -59,6 +65,7 @@ namespace Marin
             //Crosswire identity for .net
             container.CrossWire<UserManager<MarinAppUser>>(app);
             container.CrossWire<SignInManager<MarinAppUser>>(app);
+            container.CrossWire<IMemoryCache>(app);
             // NOTE: Do prevent cross-wired instances as much as possible.
             // See: https://simpleinjector.org/blog/2016/07/
 

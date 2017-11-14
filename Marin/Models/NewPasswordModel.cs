@@ -6,6 +6,7 @@ namespace Marin.Models
     public class NewPasswordModel
     {
         [Required]
+        [EmailAddress]
         public string UserEmail { get; set; }
         [Required]
         public string Token { get; set; }
