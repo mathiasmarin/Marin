@@ -1,9 +1,9 @@
 ﻿@section Scripts
 {
-    <script src="~/js/CreateBudget.js"></script>
+    <script src="~/js/CreateCategories.js"></script>
 }
 
-<div id="createBudgetApp" v-cloak>
+<div id="createCategoriesApp" v-cloak>
     <div class="row">
         <div class="col-md-12">
             <h3>Här kan du skapa din budget</h3>
@@ -12,14 +12,14 @@
     <div class="row">
         <div class="col-md-12">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active">
-                    <a href="#">Skapa kategorier</a>
+                <li class="active">
+                    <a href="@Url.Action("CreateCategories")">Skapa kategorier</a>
                 </li>
-                <li class="breadcrumb-item">
-                    <a href="#">Skapa månadsbuget</a>
+                <li>
+                    <a href="@Url.Action("CreateMonthlyBudget")">Skapa månadsbuget</a>
                 </li>
-                <li class="breadcrumb-item">
-                    <a href="#">Skapa händelse</a>
+                <li>
+                    <a href="@Url.Action("CreateCosts")">Skapa händelse</a>
                 </li>
             </ol>
         </div>

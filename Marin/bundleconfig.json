@@ -34,9 +34,9 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/js/CreateBudget.min.js",
+    "outputFileName": "wwwroot/js/CreateCategories.min.js",
     "inputFiles": [
-      "wwwroot/js/CreateBudget.js"
+      "wwwroot/js/CreateCategories.js"
     ]
   }
 ]

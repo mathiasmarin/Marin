@@ -93,5 +93,5 @@
                 });
             }
         }
-    }).$mount("#createBudgetApp");
+    }).$mount("#createCategoriesApp");
 })();
