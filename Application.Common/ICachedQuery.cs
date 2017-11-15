@@ -8,6 +8,7 @@
         /// <summary>
         /// This name must match with the property on the cacheremover command. 
         /// EG: Query x has property UserId with a value then Command x of type ICacheRemoveCommand must have a property called exactly UserId with the same value
+        /// Not sure if this will work 100% of the time. Evaluate later on
         /// </summary>
         string NameOfUniqueProperty { get; }
         int DurationMinutes { get; }

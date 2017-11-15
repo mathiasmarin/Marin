@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Marin.Controllers
 {
+    [Authorize]
     public class BudgetController: Controller
     {
         public IActionResult CreateCategories()
