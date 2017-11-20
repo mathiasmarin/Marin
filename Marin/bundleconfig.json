@@ -38,5 +38,17 @@
     "inputFiles": [
       "wwwroot/js/CreateCategories.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/CreateMonthlyBudget.min.js",
+    "inputFiles": [
+      "wwwroot/js/CreateMonthlyBudget.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/breadcrumb.min.css",
+    "inputFiles": [
+      "wwwroot/css/breadcrumb.css"
+    ]
   }
 ]

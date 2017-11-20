@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/css/sidemenu.css" rel="stylesheet" />
+        <link href="~/css/breadcrumb.css" rel="stylesheet" />
         <link href="~/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
@@ -18,6 +19,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link href="~/lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
         <link href="~/css/sidemenu.min.css" rel="stylesheet" />
+        <link href="~/css/breadcrumb.min.css" rel="stylesheet" />
        </environment>
 </head>
 <body>
@@ -49,7 +51,7 @@
         </div>
     </nav>
     <div id="mySidenav" class="sidenav col-xs-2 col-sm-2 col-md-2 col-lg-2">
-        <ul>
+        <ul class="sidenavMenu">
             @if (User.Identity.IsAuthenticated)
             {
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Startsida</a></li>

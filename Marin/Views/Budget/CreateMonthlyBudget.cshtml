@@ -1,4 +1,11 @@
-﻿<div id="createMonthlyBudgetApp" v-cloak>
+﻿@section Scripts
+{
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/CreateMonthlyBudget.js"></script>
+
+}
+<link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+<div id="createMonthlyBudgetApp" v-cloak>
     <div class="row">
         <div class="col-md-12">
             <h3>Här kan du skapa din budget</h3>
@@ -6,7 +13,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <ol class="breadcrumb">
+            <ul class="breadcrumbMenu">
                 <li>
                     <a href="@Url.Action("CreateCategories")">Skapa kategorier</a>
                 </li>
@@ -16,7 +23,12 @@
                 <li>
                     <a href="@Url.Action("CreateCosts")">Skapa händelse</a>
                 </li>
-            </ol>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="text" name="ValidForDate" value="@DateTime.Now.ToString("yyyy-MM")" id="datePicker" readonly="readonly" />
         </div>
     </div>
 </div>
