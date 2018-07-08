@@ -1,0 +1,10 @@
+<div class="login-page">
+  <div class="form">
+    <form class="login-form">
+      <input [(ngModel)]="UserName" name="UserName" type="text"  placeholder="username" />
+      <input [(ngModel)]="Password" name="Password" type="password" placeholder="password" />
+      <button (click)="Login()">login</button>
+      <p class="message">Not registered? <a href="#">Create an account</a></p>
+    </form>
+  </div>
+</div>
