@@ -1,13 +1,8 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Infrastructure.Security;
-using Marin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Marin.Controllers
 {
