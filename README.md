@@ -5,7 +5,7 @@ Technologies, frameworks and patterns used in this project are:
 1. Domain Driven Design (DDD)
 2. Entity Framework Core 2.0 Code first
 3. ASP.NET Core Identity with email confirmation via SendGrid
-4. Bootstrap, Jquery and Vue js
+4. Angular 6 CLI with Bootstrap 4
 5. Simple injector ioc container
 6. CQRS
 7. Repository patten
