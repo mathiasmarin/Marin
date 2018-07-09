@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
       'Content-Type': 'application/json'
     })
   };
+  showSpinner = false;
   constructor(private router: Router, private http: HttpClient, private userService: UserService) {
   }
 
@@ -28,7 +29,9 @@ export class LoginComponent implements OnInit {
   }
 
   Login() {
-    const router = this.router;
-    this.userService.Login(this.UserName, this.Password);
+    this.showSpinner = true;
+    this.userService.Login(this.UserName, this.Password, () => {
+      this.showSpinner = false;
+    });
   }
 }

@@ -47,7 +47,7 @@ namespace Marin.Controllers
             return BadRequest("Login failed");
         }
 
-        [HttpGet("IsUserLoggedIn")]
+        [HttpPost("IsUserLoggedIn")]
         public bool IsUserLoggedIn()
         {
             return User.Identity.IsAuthenticated;
