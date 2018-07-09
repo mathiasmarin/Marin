@@ -3,7 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Response } from "@angular/http";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '../user';
+import { User } from '../shared/classes/user';
+import { UserService } from '../shared/services/user.service';
+
 
 @Component({
   selector: 'app-login',
@@ -19,19 +21,14 @@ export class LoginComponent implements OnInit {
       'Content-Type': 'application/json'
     })
   };
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private userService: UserService) {
   }
 
   ngOnInit() {
   }
 
   Login() {
-    console.log(this.UserName);
-    this.http.post("/api/Auth/Login", JSON.stringify({ userName: this.UserName, password: this.Password}),this.httpOptions).toPromise().then(function(value) {
-      this.router.navigate(['']);
-
-    }).catch(function(reason) {
-
-    })
+    const router = this.router;
+    this.userService.Login(this.UserName, this.Password);
   }
 }

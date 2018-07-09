@@ -27,7 +27,7 @@ namespace Marin.Controllers
             _config = config;
         }
         [HttpPost("Login")]
-        public async Task<bool> Login([FromBody]LoginModel vm)
+        public async Task<IActionResult> Login([FromBody]LoginModel vm)
         {
             var user = await _userManager.FindByEmailAsync(vm.UserName);
             if (user != null)
@@ -40,7 +40,11 @@ namespace Marin.Controllers
             }
             var signinResult = await _authManager.PasswordSignInAsync(vm.UserName, vm.Password, true);
 
-            return signinResult.Succeeded;
+            if (signinResult.Succeeded)
+            {
+                return Ok(new {Token = _authManager.GenerateJwtToken(user)});
+            }
+            return BadRequest("Login failed");
         }
 
         [HttpGet("IsUserLoggedIn")]

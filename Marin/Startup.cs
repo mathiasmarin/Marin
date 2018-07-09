@@ -50,29 +50,7 @@ namespace Marin
             services.AddSingleton(Configuration);
             services.AddIdentity<MarinAppUser, IdentityRole>().AddEntityFrameworkStores<SecurityDbContext>()
                 .AddDefaultTokenProviders();
-
-            JwtSecurityTokenHandler.DefaultInboundClaimFilter.Clear();
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(cfg =>
-            {
-                cfg.RequireHttpsMetadata = false;
-                cfg.SaveToken = true;
-                cfg.TokenValidationParameters = new TokenValidationParameters
-                {
-                    RequireExpirationTime = true,
-                    ValidIssuer = Configuration["JwtIssuer"],
-                    ValidAudience = Configuration["JwtIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                    ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                };
-            });
-
-
+        
             services.AddDbContext<BudgetDbContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionStrings:MyConnectionString"]));
             services.AddDbContext<SecurityDbContext>(options =>
@@ -98,16 +76,28 @@ namespace Marin
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.ConfigureApplicationCookie(options =>
+            JwtSecurityTokenHandler.DefaultInboundClaimFilter.Clear();
+
+            services.AddAuthentication(options =>
             {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Expiration = TimeSpan.FromDays(150);
-                options.LoginPath = "/Auth/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/Auth/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/Auth/Login"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
-                options.SlidingExpiration = true;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie().AddJwtBearer(jwtBearerOptions =>
+            {
+                jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateActor = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JwtIssuer"],
+                    ValidAudience = Configuration["JwtIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
+                        (Configuration["JwtKey"]))
+                };
             });
+
             Container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

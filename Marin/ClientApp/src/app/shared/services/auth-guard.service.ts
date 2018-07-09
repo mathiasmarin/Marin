@@ -8,13 +8,20 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardServiceService implements CanActivate {
+export class AuthGuardService implements CanActivate {
   constructor(public router: Router, private httpClient: HttpClient) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.httpClient.get<boolean>("/api/Auth/IsUserLoggedIn").toPromise();
+
+    var token = sessionStorage.getItem("jwt_token");
+
+    if (token) {
+      return true;
+    }
+    this.router.navigate(['login']);
+    return false;
 
   }
 

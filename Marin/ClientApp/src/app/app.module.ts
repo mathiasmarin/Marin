@@ -9,6 +9,9 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { InfoComponent } from './info/info.component';
+import { Headers } from './shared/classes/http-headers';
+import { UserService } from './shared/services/user.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     HomeComponent,
     NavMenuComponent,
     LoginComponent,
-    IndexComponent
+    IndexComponent,
+    InfoComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -24,7 +28,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [Headers, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
