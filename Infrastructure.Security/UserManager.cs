@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Domain.Common;
@@ -30,6 +31,7 @@ namespace Infrastructure.Security
             _userRepository.Add(newUser);
             _userRepository.SaveChanges();
             await _userManager.AddClaimAsync(appUser, new Claim("UserId", newUser.Id.ToString()));
+            await _userManager.AddClaimAsync(appUser, new Claim("Name", newUser.GetFullName()));
             await _userManager.UpdateAsync(appUser);
             return result;
         }
@@ -64,6 +66,11 @@ namespace Infrastructure.Security
         public async Task<IdentityResult> ResetPasswordAsync(MarinAppUser user, string code, string newPassword)
         {
             return await _userManager.ResetPasswordAsync(user, code, newPassword);
+        }
+
+        public async Task<IList<Claim>> GetClaimsForUser(MarinAppUser user)
+        {
+            return await _userManager.GetClaimsAsync(user);
         }
     }
 }

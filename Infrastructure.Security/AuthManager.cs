@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -30,19 +31,16 @@ namespace Infrastructure.Security
             await _signInManager.SignOutAsync();
         }
 
-        public string GenerateJwtToken(MarinAppUser user)
+        public string GenerateJwtToken(MarinAppUser user, IList<Claim> identityClaims)
         {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+            identityClaims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Email));
+            identityClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
             var token = new JwtSecurityToken
             (
                 issuer: _configuration["JwtIssuer"],
                 audience: _configuration["JwtIssuer"],
-                claims: claims,
+                claims: identityClaims,
                 expires: DateTime.UtcNow.AddDays(60),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey

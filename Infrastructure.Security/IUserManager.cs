@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Security
@@ -12,5 +14,6 @@ namespace Infrastructure.Security
         string CreatePasswordResetToken(MarinAppUser user);
         Task<IdentityResult> ConfirmEmailAsync(MarinAppUser user, string code);
         Task<IdentityResult> ResetPasswordAsync(MarinAppUser user, string code, string newPassword);
+        Task<IList<Claim>> GetClaimsForUser(MarinAppUser user);
     }
 }

@@ -1,17 +1,22 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpHeaders } from '@angular/common/http';
 
 export class Headers {
 
-  public GetPostHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    headers.append('Content-Type', 'application/json');
-    let authToken = localStorage.getItem('jwt_token');
-    headers.append('Authorization', `Bearer ${authToken}`);
-    return headers;
+  public GetPostHeadeOptions() {
+    var token = sessionStorage.getItem("jwt_token");
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return httpOptions;
   }
-  public GetUnauthHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    headers.append('Content-Type', 'application/json');
-    return headers;
+  public GetUnauthHeadersOptions() {
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'})
+    };
+    return httpOptions;
   }
 }

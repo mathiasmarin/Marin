@@ -3,7 +3,9 @@
 
 body {
   padding-top: 50px;
-  padding-bottom: 20px;
+  padding-bottom: 20px;  
+}
+.login {
   background: #76b852; /* fallback for old browsers */
   background: -webkit-linear-gradient(right, #76b852, #8DC26F);
   background: -moz-linear-gradient(right, #76b852, #8DC26F);
@@ -15,6 +17,7 @@ body {
 }
 
 .body-content {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-top:20px;
+  padding-left:20px;
+  padding-right:20px;
 }

@@ -1,16 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Security;
+using Marin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace Marin.Controllers
 {
-    public class LoginModel
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
@@ -37,13 +34,16 @@ namespace Marin.Controllers
                     ModelState.AddModelError(string.Empty,
                         "Du måste ha en verifierad e-post för att logga in");
                 }
-            }
-            var signinResult = await _authManager.PasswordSignInAsync(vm.UserName, vm.Password, true);
 
-            if (signinResult.Succeeded)
-            {
-                return Ok(new {Token = _authManager.GenerateJwtToken(user)});
+                var claims = _userManager.GetClaimsForUser(user).Result;
+                var signinResult = await _authManager.PasswordSignInAsync(vm.UserName, vm.Password, true);
+
+                if (signinResult.Succeeded)
+                {
+                    return Ok(new { Token = _authManager.GenerateJwtToken(user, claims), FullName = claims.First(x => x.Type.Equals("Name")).Value });
+                }
             }
+            
             return BadRequest("Login failed");
         }
 
@@ -52,6 +52,7 @@ namespace Marin.Controllers
         {
             return User.Identity.IsAuthenticated;
         }
+        [HttpPost("Logout")]
         public void Logout()
         {
             if (User.Identity.IsAuthenticated)

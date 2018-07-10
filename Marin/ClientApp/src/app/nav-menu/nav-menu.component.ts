@@ -15,14 +15,18 @@ import {UserService} from '../shared/services/user.service'
 export class NavMenuComponent implements OnInit, OnDestroy  {
   isLoggedIn: boolean;
   subscription: Subscription;
+  userName:string;
 
   constructor(private userService: UserService) {
     
 
   }
-
+  Logout() {
+    this.userService.logout();
+  }
   ngOnInit() {
     this.subscription = this.userService.authNavStatus$.subscribe(status => this.isLoggedIn = status);
+    this.userService._userName.subscribe(x => this.userName = x);
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

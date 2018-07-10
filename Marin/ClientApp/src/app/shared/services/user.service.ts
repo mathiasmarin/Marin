@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class UserService {
   // Observable navItem source
   private _authNavStatusSource = new BehaviorSubject<boolean>(false);
+  _userName = new BehaviorSubject<string>('');
   // Observable navItem stream
   authNavStatus$ = this._authNavStatusSource.asObservable();
   private loggedIn: boolean;
@@ -41,9 +42,11 @@ export class UserService {
           sessionStorage.setItem("jwt_token", value.Token);
           this.loggedIn = true;
           this._authNavStatusSource.next(true);
+          this._userName.next(value.FullName);
           this.validateToken(value.Token);
+          callback(value);
           router.navigate(['']);
-          callback();
+         
         }
 
 
@@ -61,12 +64,7 @@ export class UserService {
   }
   validateToken(token) {
     let http = this.http;
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization':`Bearer ${token}`
-      })
-  };
+    let httpOptions = this.headers.GetPostHeadeOptions();
     this.subscription = this.interval.subscribe(x => {
       http.post("/api/Auth/IsUserLoggedIn", null, httpOptions).subscribe(x => {
         if (!x) {

@@ -90,6 +90,7 @@ namespace Marin
 
                     um.CreateAsync(appUser, "Test1234").Wait();
                     um.AddClaimAsync(appUser, new Claim("UserId", newUser.Id.ToString())).Wait();
+                    um.AddClaimAsync(appUser, new Claim("Name", newUser.GetFullName())).Wait();
                     um.UpdateAsync(appUser).Wait();
 
                     securityDbContext.SaveChanges();

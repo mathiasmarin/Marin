@@ -1,10 +1,46 @@
+$bgColor: #2e353d;
+
+/* The sidebar menu */
 .sidenav {
-  height: 100%; /* 100% Full-height */
-  position: fixed; /* Stay in place */
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
-  top: 0;
+  top: 0; /* Stay at the top */
   left: 0;
+  background-color: $bgColor;
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  padding-top: 60px;
+  font-family: verdana;
+  font-size: 12px;
+  font-weight: 200;
+  color: #e1ffff;
+
+  ul, li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    line-height: 35px;
+    cursor: pointer;
+  }
+
+  a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #e1ffff;
+    display: block;
+  }
+
+  a:hover {
+    color: #f1f1f1;
+  }
+}
+
+.navbar {
+  background-color: $bgColor;
+  a {
+    i {
+      margin-left: 8px;
+    }
+  }
 }
