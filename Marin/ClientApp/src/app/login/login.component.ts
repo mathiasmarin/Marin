@@ -14,8 +14,11 @@ import { UserService } from '../shared/services/user.service';
 })
 
 export class LoginComponent implements OnInit {
-  UserName: string;
-  Password: string;
+  userName: string;
+  password: string;
+  showNewUser:false;
+  newuser = new User();
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -28,10 +31,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  Login() {
+  login() {
     this.showSpinner = true;
-    this.userService.Login(this.UserName, this.Password, () => {
+    this.userService.login(this.userName, this.password, () => {
       this.showSpinner = false;
     });
+  }
+  CreateNewUser() {
+
   }
 }

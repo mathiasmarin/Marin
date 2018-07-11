@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Infrastructure.Security;
 using Marin.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 
 namespace Marin.Controllers
@@ -61,36 +63,34 @@ namespace Marin.Controllers
             }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Register(RegisterViewModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var signinResult = await _userManager.CreateUser(vm.FirstName, vm.LastName, vm.Email, vm.Password);
+        [HttpPost("Register")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel vm)
+        {
+            if (TryValidateModel(vm))
+            {
+                var signinResult = await _userManager.CreateUser(vm.FirstName, vm.LastName, vm.Email, vm.Password);
 
-        //        if (signinResult.Succeeded)
-        //        {
-        //            var user = _userManager.FindByEmailAsync(vm.Email).Result;
+                if (signinResult.Succeeded)
+                {
+                    var user = _userManager.FindByEmailAsync(vm.Email).Result;
 
-        //            var code = _userManager.CreateEmailConfirmationToken(user);
+                    var code = _userManager.CreateEmailConfirmationToken(user);
 
-        //            string confirmationLink = Url.Action("ConfirmEmail",
-        //                "Auth", new
-        //                {
-        //                    useremail = user.Email,
-        //                    token = code
-        //                },
-        //                HttpContext.Request.Scheme);
+                    string confirmationLink = Url.Action("confirmEmail","login", new
+                        {
+                            useremail = user.Email,
+                            token = code
+                        },HttpContext.Request.Scheme);
 
-        //            await _emailSender.SendEmailAsync(user.Email, "Bekräfta e-post",
-        //                $"Klicka på följande länk för att bekräfta din e-post: " +
-        //                $"<a href={HtmlEncoder.Default.Encode(confirmationLink)}>Bekräfta e-post</a>");
-        //            return RedirectToAction("ConfirmEmailSent");
-        //        }
-        //        ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
-        //    }
-        //}
+                    await _emailSender.SendEmailAsync(user.Email, "Bekräfta e-post",
+                        $"Klicka på följande länk för att bekräfta din e-post: " +
+                        $"<a href={HtmlEncoder.Default.Encode(confirmationLink)}>Bekräfta e-post</a>");
+                    return Ok();
+                }
+            }
+            return BadRequest("Failed to create user");
+        }
 
         //public IActionResult ConfirmEmail(string userEmail, string token)
         //{
@@ -99,13 +99,13 @@ namespace Marin.Controllers
         //    var result = _userManager.ConfirmEmailAsync(user.Result, token);
         //    if (result.Result.Succeeded)
         //    {
-        //        return View();
+        //        return Redirect("/Login");
 
         //    }
         //    else
         //    {
         //        ModelState.AddModelError("", "Det gick inte att bekräfta e-posten för denna användare");
-        //        return View();
+        //        return Redirect("/Login");
         //    }
         //}
 

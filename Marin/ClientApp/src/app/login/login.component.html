@@ -1,10 +1,68 @@
-<div class="login-page">
-  <div class="form">
-    <form class="login-form">
-      <input [(ngModel)]="UserName" name="UserName" type="text"  placeholder="username" />
-      <input [(ngModel)]="Password" name="Password" type="password" placeholder="password" />
-      <button (click)="Login()"><i *ngIf="showSpinner" class="fa fa-spinner fa-spin fa-3x fa-fw"></i>login</button>
-      <p class="message">Not registered? <a href="#">Create an account</a></p>
-    </form>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#signin">Logga in</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#signup">Registrera dig</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="tab-content">
+        <div id="signin" class="tab-pane container active">
+          <div class="login-page">
+            <div class="form">
+              <form #loginForm="ngForm" (ngSubmit)="login()">
+                <div class="form-group">
+                  <input [(ngModel)]="userName" id="userName" name="userName" #un="ngModel" class="form-control" type="text" placeholder="Email" required />
+                  <div *ngIf="un.invalid && (un.dirty || un.touched)" class="text-danger">*Användarnamn måste fyllas i</div>
+                </div>
+                <div class="form-group">
+                  <input [(ngModel)]="password" class="form-control" id="password" name="password" type="password" #pw="ngModel" placeholder="Lösenord" required />
+                  <div *ngIf="pw.invalid && (pw.dirty || pw.touched)" class="text-danger">*Lösenord måste fyllas is</div>
+                </div>
+                <button type="submit" [disabled]="!loginForm.form.valid"><i [hidden]="!showSpinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Logga in</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="signup" class="tab-pane container fade">
+          <div class="login-page">
+            <div *ngIf="!showNewUser" class="form">
+              <form #newUserForm="ngForm">
+                <div class="form-group">
+                  <input [(ngModel)]="newuser.firstName" #firstN="ngModel" class="form-control" name="firstName" type="text" placeholder="Förnamn" required />
+                  <div *ngIf="firstN.invalid && (firstN.dirty || firstN.touched)" class="alert alert-danger">Förnamn måste fyllas i</div>
+                </div>
+                <div class="form-group">
+                  <input [(ngModel)]="newuser.lastName" #lastN="ngModel" class="form-control" name="firstName" type="text" placeholder="Efternamn" required />
+                  <div *ngIf="lastN.invalid && (lastN.dirty || lastN.touched)" class="alert alert-danger">Efternamn måste fyllas i</div>
+                </div>
+                <div class="form-group">
+                  <input [(ngModel)]="newuser.email" #email="ngModel" class="form-control" name="email" type="email" placeholder="Email" required />
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">Epost måste fyllas i och vara i korrekt epost format</div>
+                </div>
+                <div class="form-group">
+                  <input [(ngModel)]="newuser.password" #pwNew="ngModel" class="form-control" name="Password" type="password" placeholder="Lösenord" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" required />
+                  <div *ngIf="pwNew.invalid && (pwNew.dirty || pwNew.touched)" class="alert alert-danger">Lösenord måste fyllas i och vara minst 8 tecken långt och innehålla stora och små bokstäver samt minst en siffra</div>
+                </div>
+                <div class="form-group">
+                  <input [(ngModel)]="newuser.passwordRepeat" #pwRepeat="ngModel" class="form-control" name="Password" type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" placeholder="Upprepa lösenord" required />
+                </div>
+                <button type="submit" (ngSubmit)="CreateNewUser()" [disabled]="!newUserForm.form.valid"><i [hidden]="!showSpinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Skapa konto</button>
+              </form>
+            </div>
+            <div *ngIf="showNewUser" class="alert alert-success">
+              Tack för din registrering! En bekräftelselänk har skickats till angiven e-post.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+
+
+

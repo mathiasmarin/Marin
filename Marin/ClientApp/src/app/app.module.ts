@@ -7,20 +7,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { IndexComponent } from './index/index.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { InfoComponent } from './info/info.component';
 import { Headers } from './shared/classes/http-headers';
 import { UserService } from './shared/services/user.service';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     NavMenuComponent,
     LoginComponent,
-    IndexComponent,
-    InfoComponent,
+    HomeComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

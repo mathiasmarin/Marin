@@ -4,6 +4,7 @@ import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { Headers } from '../classes/http-headers';
 import { interval } from 'rxjs';
 import { Router } from '@angular/router';
+import { User } from '../classes/user';
 
 
 
@@ -17,11 +18,7 @@ export class UserService {
   // Observable navItem stream
   authNavStatus$ = this._authNavStatusSource.asObservable();
   private loggedIn: boolean;
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
+  httpOptions = this.headers.GetUnauthHeadersOptions();
   private interval = interval(1000 * 10);
   subscription: Subscription;
 
@@ -33,9 +30,9 @@ export class UserService {
     this._authNavStatusSource.next(this.loggedIn);
   }
 
-  async Login(userName: string, passWord: string, callback:Function) {
+  login(userName: string, passWord: string, callback:Function) {
     var router = this.router;
-    return this.http.post("/api/Auth/Login",
+      this.http.post("/api/Auth/Login",
       JSON.stringify({ userName: userName, password: passWord }),
       this.httpOptions).subscribe((value: any) => {
         if (value.hasOwnProperty("Token")) {
@@ -44,13 +41,22 @@ export class UserService {
           this._authNavStatusSource.next(true);
           this._userName.next(value.FullName);
           this.validateToken(value.Token);
-          callback(value);
+          callback();
           router.navigate(['']);
          
         }
 
 
       });
+  }
+  createNewUser(newUser: User, callback:Function) {
+    var router = this.router;
+    this.http.post("/api/Auth/Login",
+      JSON.stringify(newUser),
+      this.httpOptions).subscribe((value: any) => {
+      
+
+    });
   }
   isLoggedIn() {
     return this.loggedIn;
