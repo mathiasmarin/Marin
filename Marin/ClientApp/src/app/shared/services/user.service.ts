@@ -19,7 +19,7 @@ export class UserService {
   authNavStatus$ = this._authNavStatusSource.asObservable();
   private loggedIn: boolean;
   httpOptions = this.headers.GetUnauthHeadersOptions();
-  private interval = interval(1000 * 10);
+  private interval = interval(1000 * 60);
   subscription: Subscription;
 
 
@@ -49,14 +49,13 @@ export class UserService {
 
       });
   }
-  createNewUser(newUser: User, callback:Function) {
-    var router = this.router;
-    this.http.post("/api/Auth/Login",
+  validateEmail(email: string, token: string): Observable<Object> {
+    return this.http.post("/api/Auth/ConfirmEmail", JSON.stringify({ Email: email, Token: token }), this.httpOptions);
+  }
+  createNewUser(newUser: User): Observable<Object> {
+    return this.http.post("/api/Auth/Register",
       JSON.stringify(newUser),
-      this.httpOptions).subscribe((value: any) => {
-      
-
-    });
+      this.httpOptions);
   }
   isLoggedIn() {
     return this.loggedIn;
@@ -71,9 +70,9 @@ export class UserService {
   validateToken(token) {
     let http = this.http;
     let httpOptions = this.headers.GetPostHeadeOptions();
-    this.subscription = this.interval.subscribe(x => {
+    this.subscription = this.interval.subscribe(successValue => {
       http.post("/api/Auth/IsUserLoggedIn", null, httpOptions).subscribe(x => {
-        if (!x) {
+        if (!successValue) {
           this.logout();
         }
       });

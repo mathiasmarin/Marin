@@ -1,0 +1,14 @@
+<div [hidden]="!showLoader">
+  <div class="row">
+    <div id="loader"></div>
+  </div>
+  <div class="row">
+    <div class="col-3 offset-5">
+      <h3>Bekräftar e-post...</h3>
+    </div>
+  </div>
+</div>
+<div *ngIf="!showLoader" class="animate-bottom centerText">
+  <h2>Hej hopp</h2>
+  <p>Gummisnopp</p>
+</div>

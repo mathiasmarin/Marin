@@ -80,10 +80,10 @@ namespace Marin
                 context.Database.Migrate();
                 securityDbContext.Database.Migrate();
 
-                if (!securityDbContext.Users.Any(x => x.Email.Equals("mathiasmarin86@gmail.com")))
+                if (!securityDbContext.Users.Any(x => x.Email.Equals("janneb@mailinator.com")))
                 {
                     var um = serviceScope.ServiceProvider.GetRequiredService<UserManager<MarinAppUser>>();
-                    var newUser = new User("Mathias", "Marin", "mathiasmarin86@gmail.com");
+                    var newUser = new User("Jan", "Banan", "janneb@mailinator.com");
                     var appUser = new MarinAppUser(newUser) { EmailConfirmed = true };
                     context.GetSet<User>().Add(newUser);
                     context.SaveChanges();

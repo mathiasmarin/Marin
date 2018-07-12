@@ -16,7 +16,7 @@ import { UserService } from '../shared/services/user.service';
 export class LoginComponent implements OnInit {
   userName: string;
   password: string;
-  showNewUser:false;
+  showNewUser = false;
   newuser = new User();
 
   httpOptions = {
@@ -25,19 +25,26 @@ export class LoginComponent implements OnInit {
     })
   };
   showSpinner = false;
+  showNewUserSpinner = false;
   constructor(private router: Router, private http: HttpClient, private userService: UserService) {
   }
 
   ngOnInit() {
   }
-
   login() {
     this.showSpinner = true;
     this.userService.login(this.userName, this.password, () => {
       this.showSpinner = false;
     });
   }
-  CreateNewUser() {
+  createNewUser() {
+    this.showNewUserSpinner = true;
+    this.userService.createNewUser(this.newuser).subscribe(() => {
+      this.showNewUserSpinner = false;
+      $("#fadeOutForm").fadeOut("slow");
+      this.showNewUser = true;
+      $("#fadeOutForm").fadeIn("slow");
 
+    });
   }
 }

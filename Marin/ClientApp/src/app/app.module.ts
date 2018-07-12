@@ -11,6 +11,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { Headers } from './shared/classes/http-headers';
 import { UserService } from './shared/services/user.service';
 import { InfoComponent } from './info/info.component';
+import { ConfirmemailComponent } from './login/confirmemail/confirmemail.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,14 @@ import { InfoComponent } from './info/info.component';
     NavMenuComponent,
     LoginComponent,
     HomeComponent,
-    InfoComponent
+    InfoComponent,
+    ConfirmemailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,    
   ],
   providers: [Headers, UserService],
   bootstrap: [AppComponent]

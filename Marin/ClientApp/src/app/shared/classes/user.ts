@@ -1,5 +1,5 @@
 export class User {
-  passwordRepeat:string;
+  passwordConfirm:string;
   password: string;
   email: string;
   firstName: string;

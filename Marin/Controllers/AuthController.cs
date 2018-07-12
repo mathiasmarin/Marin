@@ -64,7 +64,6 @@ namespace Marin.Controllers
         }
 
         [HttpPost("Register")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromBody]RegisterViewModel vm)
         {
             if (TryValidateModel(vm))
@@ -91,23 +90,22 @@ namespace Marin.Controllers
             }
             return BadRequest("Failed to create user");
         }
+        [HttpPost("ConfirmEmail")]
+        public IActionResult ConfirmEmail([FromBody]EmailConfirmationModel vm)
+        {
+            var user = _userManager.FindByEmailAsync(vm.Email);
 
-        //public IActionResult ConfirmEmail(string userEmail, string token)
-        //{
-        //    var user = _userManager.FindByEmailAsync(userEmail);
+            var result = _userManager.ConfirmEmailAsync(user.Result, vm.Token);
+            if (result.Result.Succeeded)
+            {
+                return Ok();
 
-        //    var result = _userManager.ConfirmEmailAsync(user.Result, token);
-        //    if (result.Result.Succeeded)
-        //    {
-        //        return Redirect("/Login");
-
-        //    }
-        //    else
-        //    {
-        //        ModelState.AddModelError("", "Det gick inte att bekräfta e-posten för denna användare");
-        //        return Redirect("/Login");
-        //    }
-        //}
+            }
+            else
+            {
+                return BadRequest("Det gick inte att bekräfta e-posten för denna användare");
+            }
+        }
 
         //public IActionResult ConfirmEmailSent()
         //{
