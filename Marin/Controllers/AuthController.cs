@@ -76,7 +76,7 @@ namespace Marin.Controllers
 
                     var code = _userManager.CreateEmailConfirmationToken(user);
 
-                    string confirmationLink = Url.Action("confirmEmail","login", new
+                    string confirmationLink = Url.Action("confirmemail","login", new
                         {
                             useremail = user.Email,
                             token = code
@@ -88,6 +88,7 @@ namespace Marin.Controllers
                     return Ok();
                 }
             }
+            
             return BadRequest("Failed to create user");
         }
         [HttpPost("ConfirmEmail")]
@@ -106,12 +107,6 @@ namespace Marin.Controllers
                 return BadRequest("Det gick inte att bekräfta e-posten för denna användare");
             }
         }
-
-        //public IActionResult ConfirmEmailSent()
-        //{
-        //    return View();
-        //}
-
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult ForgotPassword(ResetPasswordModel vm)

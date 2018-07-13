@@ -9,6 +9,9 @@
   </div>
 </div>
 <div *ngIf="!showLoader" class="animate-bottom centerText">
-  <h2>Hej hopp</h2>
-  <p>Gummisnopp</p>
+  <h2>Grattis!</h2>
+  <p>Din e-post är bekräftad och du kan logga in <a routerlink="/login"></a></p>
+</div>
+<div *ngIf="showError" class="animate-bottom centerText alert alert-danger">
+  Aj aj aj... Nu gick något fel kissekatten. Testa klicka på länken igen eller kontakta support. :(
 </div>

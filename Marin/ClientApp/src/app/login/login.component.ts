@@ -41,10 +41,13 @@ export class LoginComponent implements OnInit {
     this.showNewUserSpinner = true;
     this.userService.createNewUser(this.newuser).subscribe(() => {
       this.showNewUserSpinner = false;
-      $("#fadeOutForm").fadeOut("slow");
-      this.showNewUser = true;
+      $("#fadeOutForm").fadeOut("slow",null,() => {
+        this.showNewUser = true;
+      });
       $("#fadeOutForm").fadeIn("slow");
 
+    },error => {
+      alert("Gick inte alls bra det där. Testa igen");
     });
   }
 }

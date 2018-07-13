@@ -22,7 +22,7 @@
                   <input [(ngModel)]="password" class="form-control" id="password" name="password" type="password" #pw="ngModel" placeholder="Lösenord" required />
                   <div *ngIf="pw.invalid && (pw.dirty || pw.touched)" class="text-danger">*Lösenord måste fyllas is</div>
                 </div>
-                <button type="submit" [disabled]="!loginForm.form.valid"><i [hidden]="!showSpinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Logga in</button>
+                <button type="submit" [disabled]="!loginForm.form.valid">{{showSpinner === false ? 'Logga in' : 'Loggar in...'}}<i *ngIf="showSpinner" class="fa fa-spinner fa-spin fa-1dot5x fa-fw"></i></button>
               </form>
             </div>
           </div>
@@ -50,7 +50,7 @@
                 <div class="form-group">
                   <input [(ngModel)]="newuser.passwordConfirm" #pwRepeat="ngModel" class="form-control" name="Password" type="password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" placeholder="Upprepa lösenord" required />
                 </div>
-                <button type="submit" [disabled]="!newUserForm.form.valid"><i [hidden]="!showNewUserSpinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>Skapa konto</button>
+                <button [disabled]="!newUserForm.form.valid" type="submit">{{showNewUserSpinner === false ? 'Skapa konto' : 'Skapar konto...' }}<i *ngIf="showNewUserSpinner" class="fa fa-spinner fa-spin fa-1dot5x fa-fw"></i></button>
               </form>
               <div *ngIf="showNewUser" class="alert alert-success">
                 Tack för din registrering! En bekräftelselänk har skickats till angiven e-post.

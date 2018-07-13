@@ -65,6 +65,7 @@ export class UserService {
     this.loggedIn = false;
     this._authNavStatusSource.next(false);
     this.subscription.unsubscribe();
+    this._userName.next('');
     this.router.navigate(['login']);
   }
   validateToken(token) {
