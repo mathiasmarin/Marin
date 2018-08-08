@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit {
   };
   showSpinner = false;
   showNewUserSpinner = false;
+  showForgotPwSpinner = false;
+  showPwReset = false;
   constructor(private router: Router, private http: HttpClient, private userService: UserService) {
   }
 
@@ -35,6 +37,15 @@ export class LoginComponent implements OnInit {
     this.showSpinner = true;
     this.userService.login(this.userName, this.password, () => {
       this.showSpinner = false;
+    });
+  }
+  forgotPassword() {
+    this.showForgotPwSpinner = true;
+    this.userService.resetPassword(this.userName).subscribe(() => {
+      this.showForgotPwSpinner = false;
+      this.showPwReset = true;
+    },error => {
+
     });
   }
   createNewUser() {

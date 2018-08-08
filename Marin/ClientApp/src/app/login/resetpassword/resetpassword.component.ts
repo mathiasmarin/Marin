@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from '../../shared/services/user.service';
-import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
-  selector: 'app-confirmemail',
-  templateUrl: './confirmemail.component.html',
-  styleUrls: ['./confirmemail.component.scss']
+  selector: 'app-resetpassword',
+  templateUrl: './resetpassword.component.html',
+  styleUrls: ['./resetpassword.component.scss']
 })
-export class ConfirmemailComponent implements OnInit {
+export class ResetpasswordComponent implements OnInit {
   private userEmail: string;
   private showLoader = true;
   private showError = false;
   private emailToken: string;
+  private newPassword: string;
   private sub: Subscription;
+  private showSpinner = false;
+  private showConfirm = false;
   constructor(private route: ActivatedRoute,
     private router: Router, private userService: UserService) { }
 
@@ -23,16 +25,17 @@ export class ConfirmemailComponent implements OnInit {
     this.sub = this.route.queryParams.subscribe((params: Params) => {
       this.userEmail = params['useremail'];
       this.emailToken = params['token'];
-      this.userService.validateEmail(this.userEmail, this.emailToken).subscribe((value) => {
-          this.showLoader = false;
-        },
-        error => {
-          this.showLoader = false;
-          this.showError = true;
-        });
     });
-    
-    
+  }
+  resetPassword() {
+    this.showSpinner = true;
+    this.userService.setNewPassword(this.userEmail, this.emailToken, this.newPassword).subscribe((value) => {
+      this.showSpinner = false;
+      this.showConfirm = true;
+    },
+      error => {
+        this.showSpinner = false;
+      });
   }
 
 }

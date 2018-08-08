@@ -12,6 +12,7 @@ import { Headers } from './shared/classes/http-headers';
 import { UserService } from './shared/services/user.service';
 import { InfoComponent } from './info/info.component';
 import { ConfirmemailComponent } from './login/confirmemail/confirmemail.component';
+import { ResetpasswordComponent } from './login/resetpassword/resetpassword.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ConfirmemailComponent } from './login/confirmemail/confirmemail.compone
     LoginComponent,
     HomeComponent,
     InfoComponent,
-    ConfirmemailComponent
+    ConfirmemailComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

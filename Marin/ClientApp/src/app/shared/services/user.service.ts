@@ -24,7 +24,7 @@ export class UserService {
 
 
   constructor(private http: HttpClient, private headers: Headers, private router: Router) {
-    this.loggedIn = !!sessionStorage.getItem('jwt_token');
+    this.loggedIn = !!localStorage.getItem('jwt_token');
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
     // header component resulting in authed user nav links disappearing despite the fact user is still logged in
     this._authNavStatusSource.next(this.loggedIn);
@@ -36,7 +36,7 @@ export class UserService {
       JSON.stringify({ userName: userName, password: passWord }),
       this.httpOptions).subscribe((value: any) => {
         if (value.hasOwnProperty("Token")) {
-          sessionStorage.setItem("jwt_token", value.Token);
+          localStorage.setItem("jwt_token", value.Token);
           this.loggedIn = true;
           this._authNavStatusSource.next(true);
           this._userName.next(value.FullName);
@@ -52,6 +52,17 @@ export class UserService {
   validateEmail(email: string, token: string): Observable<Object> {
     return this.http.post("/api/Auth/ConfirmEmail", JSON.stringify({ Email: email, Token: token }), this.httpOptions);
   }
+
+  setNewPassword(email: string, token: string, newPassword:string): Observable<Object> {
+    return this.http.post("/api/Auth/ResetPassword",
+      JSON.stringify({ UserEmail: email, Token: token, NewPassword: newPassword }),
+      this.httpOptions);
+  }
+  resetPassword(email: string): Observable<Object> {
+    return this.http.post("/api/Auth/ForgotPassword",
+      JSON.stringify({Email: email}),
+      this.httpOptions);
+  }
   createNewUser(newUser: User): Observable<Object> {
     return this.http.post("/api/Auth/Register",
       JSON.stringify(newUser),
@@ -61,7 +72,7 @@ export class UserService {
     return this.loggedIn;
   }
   logout() {
-    sessionStorage.removeItem('jwt_token');
+    localStorage.removeItem('jwt_token');
     this.loggedIn = false;
     this._authNavStatusSource.next(false);
     this.subscription.unsubscribe();
@@ -76,6 +87,8 @@ export class UserService {
         if (!successValue) {
           this.logout();
         }
+      },error => {
+        console.log(error);
       });
     });
   }

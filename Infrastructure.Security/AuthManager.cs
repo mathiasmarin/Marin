@@ -41,7 +41,7 @@ namespace Infrastructure.Security
                 issuer: _configuration["JwtIssuer"],
                 audience: _configuration["JwtIssuer"],
                 claims: identityClaims,
-                expires: DateTime.UtcNow.AddDays(60),
+                expires: DateTime.UtcNow.AddHours(1),
                 notBefore: DateTime.UtcNow,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey
                         (Encoding.UTF8.GetBytes(_configuration["JwtKey"])),

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Infrastructure.Security;
 using Marin.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 
 namespace Marin.Controllers
@@ -16,14 +15,12 @@ namespace Marin.Controllers
         private readonly IAuthManager _authManager;
         private readonly IUserManager _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly IConfiguration _config;
 
-        public AuthController(IAuthManager authManager, IUserManager userManager, IEmailSender emailSender, IConfiguration config)
+        public AuthController(IAuthManager authManager, IUserManager userManager, IEmailSender emailSender)
         {
             _authManager = authManager ?? throw new ArgumentNullException(nameof(authManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
-            _config = config;
         }
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginModel vm)
@@ -107,85 +104,57 @@ namespace Marin.Controllers
                 return BadRequest("Det gick inte att bekräfta e-posten för denna användare");
             }
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult ForgotPassword(ResetPasswordModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = _userManager.FindByEmailAsync(vm.Email).Result;
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword([FromBody]ResetPasswordModel vm)
+        {
+            if (TryValidateModel(vm))
+            {
+                var user = _userManager.FindByEmailAsync(vm.Email).Result;
 
-        //        if (user == null)
-        //        {
-        //            ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
-        //            return View();
+                if (user == null)
+                {
+                    return BadRequest("Gick inte att hitta en användare med denna e-post");
+                }
 
-        //        }
+                var code = _userManager.CreatePasswordResetToken(user);
 
-        //        var code = _userManager.CreatePasswordResetToken(user);
+                string confirmationLink = Url.Action("resetpassword",
+                    "login", new
+                    {
+                        useremail = user.Email,
+                        token = code
+                    },
+                    HttpContext.Request.Scheme);
 
-        //        string confirmationLink = Url.Action("ResetPassword",
-        //            "Auth", new
-        //            {
-        //                useremail = user.Email,
-        //                token = code
-        //            },
-        //            HttpContext.Request.Scheme);
+                _emailSender.SendEmailAsync(user.Email, "Återställ lösenord",
+                    $"Klicka på följande länk för att återställa ditt lösenord: " +
+                    $"<a href={HtmlEncoder.Default.Encode(confirmationLink)}>Återställ lösenord</a>");
 
-        //        _emailSender.SendEmailAsync(user.Email, "Återställ lösenord",
-        //            $"Klicka på följande länk för att återställa ditt lösenord: " +
-        //            $"<a href={HtmlEncoder.Default.Encode(confirmationLink)}>Återställ lösenord</a>");
-        //        return RedirectToAction("ResetEmailSent");
-        //    }
-        //    ModelState.AddModelError("", "Du har matat in felaktiga uppgifter");
+                return Ok();
+            }
+            return BadRequest("Du har matat in felaktiga uppgifter");
+        }
+        [HttpPost("ResetPassword")]
+        public IActionResult ResetPassword([FromBody]NewPasswordModel vm)
+        {
+            if (TryValidateModel(vm))
+            {
+                var user = _userManager.FindByEmailAsync(vm.UserEmail);
 
-        //    return View();
-        //}
+                user.Wait();
 
-        //public IActionResult ResetEmailSent()
-        //{
-        //    return View();
-        //}
+                var result = _userManager.ResetPasswordAsync(user.Result, vm.Token, vm.NewPassword);
 
-        //public IActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+                result.Wait();
 
-        //public IActionResult ResetPassword(string useremail, string token)
-        //{
-        //    return View(new NewPasswordModel { Token = token, UserEmail = useremail });
-        //}
+                if (result.Result.Succeeded)
+                {
+                    return Ok();
+                }
+            }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult ResetPassword(NewPasswordModel vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = _userManager.FindByEmailAsync(vm.UserEmail);
+            return BadRequest("Det gick inte att återställa lösenordet");
 
-        //        user.Wait();
-
-        //        var result = _userManager.ResetPasswordAsync(user.Result, vm.Token, vm.NewPassword);
-
-        //        result.Wait();
-
-        //        if (result.Result.Succeeded)
-        //        {
-        //            return RedirectToAction("ResetPasswordConfirm");
-        //        }
-        //        ModelState.AddModelError("", "Det gick inte att återställa lösenordet");
-        //        return View();
-        //    }
-        //    ModelState.AddModelError("", "Det gick inte att återställa lösenordet");
-        //    return View();
-
-        //}
-
-        //public IActionResult ResetPasswordConfirm()
-        //{
-        //    return View();
-        //}
+        }
     }
 }
